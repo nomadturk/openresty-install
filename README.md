@@ -15,7 +15,7 @@ php-fpm fixes (cgi.fix_pathinfo, change user to www-data)<br>
 
 You can run it with:
 
-<quote>
+<blockquote>
 apt-get -y --force-yes install screen
 <br>
 screen -m -S LOMPInstaller
@@ -27,4 +27,4 @@ sleep 5
 wget --no-check-certificate https://raw.githubusercontent.com/nomadturk/openresty-install/master/inst.sh && bash inst.sh
 exit
 <br>
-</quote>
+</blockquote>
