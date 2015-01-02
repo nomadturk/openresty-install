@@ -20,6 +20,7 @@ Vultr Debian Servers<br>
 Miranis Openstacks Debian<br>
 DigitalOcean Debian Droplets (Eventhough DO gave me a lot off dropping connections from different locations whilst all my other ssh connections were flawless, all the test were success)<br>
 
+You need a FRESH Debian 7 installation for this to run the way it is intended. It might still run but it's not tested...
 
 You can run it with:
 
