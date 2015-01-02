@@ -25,7 +25,7 @@ You need a FRESH Debian 7 installation for this to run the way it is intended. I
 You can run it with:
 
 <blockquote>
-wget http://bit.ly/openresty -O start.sh
+wget --no-check-certificate http://bit.ly/openresty -O start.sh
 <br>
 bash start.sh
 </blockquote>
