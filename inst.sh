@@ -35,7 +35,8 @@ dpkg-reconfigure locales
 # Remove any existing packages:
  show_progress "Removing ffmpeg files if there any."
 apt-get update &>> /dev/null
-apt-get -y remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm &>> /dev/null
+apt-get -y --force-yes dist-upgrade &>> /dev/null
+apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm &>> /dev/null
 apt-get -y --force-yes install software-properties-common python-software-properties &>> /dev/null
 # Let's install what's needed...
 
@@ -445,16 +446,16 @@ show_progress "Uh oh... We forgot installing mysql. So... MariaDB it is!"
 cd ~/
 
 ## MariaDB
-apt-get install python-software-properties &>> /dev/null
+apt-get -y --force-yes install python-software-properties &>> /dev/null
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db &>> /dev/null
-add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main' &>> /dev/null
+add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
 apt-get update &>> /dev/null
 apt-get -y --force-yes install mariadb-server &>> /dev/null
 
 show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
 ## DotDeb Php 5.5, 
-add-apt-repository 'deb http://packages.dotdeb.org wheezy all' &>> /dev/null
-add-apt-repository 'deb http://packages.dotdeb.org wheezy-php55 all' &>> /dev/null
+add-apt-repository 'deb http://packages.dotdeb.org wheezy all'
+add-apt-repository 'deb http://packages.dotdeb.org wheezy-php55 all'
 wget http://www.dotdeb.org/dotdeb.gpg &>> /dev/null
 apt-key add dotdeb.gpg &>> /dev/null
 apt-get update &>> /dev/null
@@ -517,4 +518,4 @@ show_progress "Done and done... Enjoy it. All is ready to go."
 
 END=$(date +%s)
 DIFF=$(( $END - $START )/60)
-show_progress_info "It took $DIFF minutes to finish all"
+show_progress_info "Hurray! In mere $DIFF minutes all is finished! Congrats dude..."
