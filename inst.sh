@@ -1,24 +1,24 @@
-# Blue color
+# Yellow
 function show_progress()
+{
+	echo $(tput setaf 3)$@$(tput sgr0)
+}
+
+# Blue
+function show_progress_info()
 {
 	echo $(tput setaf 4)$@$(tput sgr0)
 }
 
-# White color
-function show_progress_info()
-{
-	echo $(tput setaf 7)$@$(tput sgr0)
-}
-
 # Red color
-function show_progress_fail()
+function show_progress_error()
 {
 	echo $(tput setaf 1)$@$(tput sgr0)
 }
 
 # Checking permissions
 if [[ $EUID -ne 0 ]]; then
-	 show_progress_fail "You need root permissions to run the script."
+	 show_progress_error "You need root permissions to run the script."
 	exit 1
 fi
 
