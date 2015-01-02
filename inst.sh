@@ -330,7 +330,7 @@ wget http://openresty.org/download/ngx_openresty-1.7.7.1.tar.gz &>> /dev/null
 tar -xvzf ngx_openresty-1.7.7.1.tar.gz &>> /dev/null
 cd ngx_openresty-1.7.7.1
 ./configure \
---prefix=/  \
+--prefix=/usr/local/nginx/  \
 --sbin-path=/usr/sbin/nginx \
 --conf-path=/etc/nginx/nginx.conf \
 --pid-path=/var/run/nginx.pid \
@@ -475,7 +475,7 @@ sed -i "s/^  access_log logs\/static.log/  access_log \/var\/log\/nginx\/static.
 
 
 mkdir -p /var/www
-cp /usr/share/nginx/nginx/html/*.html /var/www/
+cp /usr/local/nginx/nginx/html/*.html /var/www/
 chown -R www-data:www-data /var/www/
 
 
