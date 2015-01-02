@@ -1,3 +1,7 @@
+#!/bin/bash
+#Lets calculate how much time is spent
+START=$(date +%s)
+
 # Yellow
 function show_progress()
 {
@@ -510,3 +514,7 @@ show_progress "Done and done... Enjoy it. All is ready to go."
 #https://github.com/tg123/websockify-nginx-module
 #https://github.com/masterzen/nginx-upload-progress-module
 #http://pkula.blogspot.com.tr/2013/06/live-video-stream-from-raspberry-pi.html
+
+END=$(date +%s)
+DIFF=$(( $END - $START )/60)
+show_progress_info "It took $DIFF minutes to finish all"
