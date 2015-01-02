@@ -24,15 +24,7 @@ DigitalOcean Debian Droplets (Eventhough DO gave me a lot off dropping connectio
 You can run it with:
 
 <blockquote>
-apt-get -y --force-yes install screen
+wget http://bit.ly/openresty -O start.sh
 <br>
-screen -m -S LOMPInstaller
-<br>
-echo $(tput setaf 1)The installer is now running in a screen. You can detach or if your connection to ever drop you can reconnect to this screen with the command:$(tput setaf 2) screen -r LOMPInstaller$(tput sgr0)&>> /dev/null
-<br>
-sleep 5
-<br>
-wget --no-check-certificate https://raw.githubusercontent.com/nomadturk/openresty-install/master/inst.sh && bash inst.sh
-exit
-<br>
+bash start.sh
 </blockquote>
