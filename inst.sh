@@ -74,9 +74,9 @@ mkdir -p /root/ngx-build/
 cd ~/src-build/build-ffmpeg
 git clone git://github.com/yasm/yasm.git
 cd yasm
-./autogen.sh
-./configure
-make 
+./autogen.sh &>> /dev/null
+./configure &>> /dev/null
+make &>> /dev/null
 checkinstall --pkgname=yasm --pkgversion="1.3.0" --backup=no \
   --deldoc=yes --fstrans=no --default
   
@@ -85,8 +85,8 @@ checkinstall --pkgname=yasm --pkgversion="1.3.0" --backup=no \
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 git://git.videolan.org/x264
 cd x264
-./configure --enable-static
-make
+./configure --enable-static &>> /dev/null
+make &>> /dev/null
 checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
   awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
   --fstrans=no --default
@@ -95,10 +95,10 @@ checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
 cd fdk-aac
-./autogen.sh
-autoreconf -fiv
-./configure --disable-shared
-make
+./autogen.sh &>> /dev/null
+autoreconf -fiv &>> /dev/null
+./configure --disable-shared &>> /dev/null
+make &>> /dev/null
 checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
  show_progress "		Installing libvpx" 
@@ -106,8 +106,8 @@ checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=n
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 http://git.chromium.org/webm/libvpx.git
 cd libvpx
-./configure --disable-examples --disable-unit-tests
-make
+./configure --disable-examples --disable-unit-tests &>> /dev/null
+make &>> /dev/null
 checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
 
@@ -116,8 +116,8 @@ checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 git://git.xiph.org/opus.git
 cd opus
-./autogen.sh
-./configure --disable-shared
+./autogen.sh &>> /dev/null
+./configure --disable-shared &>> /dev/null
 make
 checkinstall --pkgname=libopus --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
@@ -138,9 +138,9 @@ checkinstall --pkgname=libopus --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=n
  show_progress "		Installing librtmp"
 #################################### librtmp
 cd ~/src-build/build-ffmpeg
-git clone git://git.ffmpeg.org/rtmpdump
+git clone git://git.ffmpeg.org/rtmpdump &>> /dev/null
 cd rtmpdump
-make SYS=posix
+make SYS=posix &>> /dev/null
 checkinstall --pkgname=rtmpdump --pkgversion="2:$(date +%Y%m%d%H%M)-git" --backup=no \
     --deldoc=yes --fstrans=no --default
 
@@ -149,7 +149,7 @@ export LD_LIBRARY_PATH=/usr/local/lib/
  show_progress "Now... Using all above, compiling FFMpeg"
 ################################### Finally, ffmpeg
 cd ~/src-build/build-ffmpeg
-git clone https://github.com/FFmpeg/FFmpeg.git
+git clone https://github.com/FFmpeg/FFmpeg.git &>> /dev/null
 cd FFmpeg
 ./configure \
   --enable-gpl \
@@ -173,8 +173,8 @@ cd FFmpeg
   --enable-libgsm \
   --enable-zlib \
   --enable-swscale \
-  --enable-pthreads
-make
+  --enable-pthreads &>> /dev/null
+make &>> /dev/null
 checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
 hash -r
@@ -204,28 +204,29 @@ mkdir -p ~/src-build/gperftools
 cd ~/src-build/gperftools
 #wget -c http://ftp.twaren.net/Unix/NonGNU/libunwind/libunwind-1.1.tar.gz
 #tar zxvf libunwind-1.1.tar.gz
-git clone git://git.sv.gnu.org/libunwind.git
+git clone git://git.sv.gnu.org/libunwind.git &>> /dev/null
 cd libunwind
-./autogen.sh
-./configure CFLAGS=-U_FORTIFY_SOURCE
-make 
-make install
+./autogen.sh &>> /dev/null
+./configure CFLAGS=-U_FORTIFY_SOURCE &>> /dev/null
+make  &>> /dev/null
+make install &>> /dev/null
 
  show_progress "		Installing gperftools"
 cd ~/src-build/gperftools
-git clone https://code.google.com/p/gperftools-git/
+git clone https://code.google.com/p/gperftools-git/ &>> /dev/null
 cd gperftools-git
-./autogen.sh
-./configure --prefix=/usr/local/gperftools --enable-shared --enable-frame-pointers
-make 
-make install
+./autogen.sh &>> /dev/null
+./configure --prefix=/usr/local/gperftools --enable-shared --enable-frame-pointers &>> /dev/null
+make  &>> /dev/null
+make install &>> /dev/null
 cp -r /usr/local/gperftools/lib/* /usr/local/lib/
 
 mkdir /tmp/tcmalloc
 chmod 0777 /tmp/tcmalloc/
 chown -R www-data:www-data /tmp/tcmalloc
- show_progress "		Installing apt-get additions for gperftools"
-apt-get -y --force-yes install google-perftools libgoogle-perftools-dev
+
+show_progress "		Installing apt-get additions for gperftools"
+apt-get -y --force-yes install google-perftools libgoogle-perftools-dev &>> /dev/null
 export PPROF_PATH=/usr/local/bin/pprof
 ######################################### 
 
@@ -235,16 +236,16 @@ cd ~/src-build/
 #tar -xvzf libwebp-0.4.2.tar.gz
 git clone https://github.com/webmproject/libwebp.git
 cd libwebp
-./autogen.sh
-./configure
-make
-make install	
+./autogen.sh &>> /dev/null
+./configure &>> /dev/null
+make &>> /dev/null
+make install	 &>> /dev/null
 
  show_progress "Compile ImageMagick, shall we?"
 #########################################  ImageMagick
 cd ~/src-build/
-wget -c http://www.imagemagick.org/download/ImageMagick.tar.gz
-tar -zxvf ImageMagick.tar.gz
+wget -c http://www.imagemagick.org/download/ImageMagick.tar.gz &>> /dev/null
+tar -zxvf ImageMagick.tar.gz &>> /dev/null
 cd ImageMagick*
 ./configure --prefix=/usr/local/ImageMagick/     \
 	--sysconfdir=/etc \
@@ -254,10 +255,10 @@ cd ImageMagick*
 	--with-webp \
 	--with-gslib \
 	--with-perl=/usr/bin/perl \
-	--disable-static
-make
+	--disable-static &>> /dev/null
+make &>> /dev/null
 #checkinstall --fstrans=no --install=no -y 
-make install
+make install &>> /dev/null
 #cd ~/src-build/
 #rm -rf ImageMagick-*
 ######################################### 
@@ -267,17 +268,17 @@ make install
  show_progress "		Installing OpenSSL"
 ######################################### OpenSSL
 cd /root/ngx-build/
-git clone https://github.com/openssl/openssl.git
+git clone https://github.com/openssl/openssl.git &>> /dev/null
 
  show_progress "		Installing ngx_pagespeed"
 ######################################### ngx_pagespeed
 cd /root/ngx-build/
-wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.2-beta.zip
-unzip release-1.9.32.2-beta.zip
+wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.2-beta.zip &>> /dev/null
+unzip release-1.9.32.2-beta.zip &>> /dev/null
 cd ngx_pagespeed-release-1.9.32.2-beta/
  show_progress "		Installing psol for ngx_pagespeed"
-wget https://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz
-tar -xzvf 1.9.32.2.tar.gz  # extracts to psol/
+wget https://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz &>> /dev/null
+tar -xzvf 1.9.32.2.tar.gz   &>> /dev/null # extracts to psol/
 
 
 ######################################### Necessary modules from GitHub
@@ -287,27 +288,27 @@ tar -xzvf 1.9.32.2.tar.gz  # extracts to psol/
 #cd /root/ngx-build/
 #git clone https://github.com/openresty/echo-nginx-module.git
 cd /root/ngx-build/
-git clone https://github.com/nbs-system/naxsi.git
+git clone https://github.com/nbs-system/naxsi.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/arut/nginx-dav-ext-module.git
+git clone https://github.com/arut/nginx-dav-ext-module.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/slact/nginx_http_push_module.git
+git clone https://github.com/slact/nginx_http_push_module.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/arut/nginx-rtmp-module.git
+git clone https://github.com/arut/nginx-rtmp-module.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/arut/nginx-dlna-module.git
+git clone https://github.com/arut/nginx-dlna-module.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/tg123/websockify-nginx-module.git
+git clone https://github.com/tg123/websockify-nginx-module.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/masterzen/nginx-upload-progress-module.git
+git clone https://github.com/masterzen/nginx-upload-progress-module.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/gnosek/nginx-upstream-fair.git
+git clone https://github.com/gnosek/nginx-upstream-fair.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/wandenberg/nginx-video-thumbextractor-module.git
+git clone https://github.com/wandenberg/nginx-video-thumbextractor-module.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/FRiCKLE/ngx_cache_purge.git
+git clone https://github.com/FRiCKLE/ngx_cache_purge.git &>> /dev/null
 cd /root/ngx-build/
-git clone https://github.com/aperezdc/ngx-fancyindex.git
+git clone https://github.com/aperezdc/ngx-fancyindex.git &>> /dev/null
 
 
 
@@ -320,8 +321,8 @@ git clone https://github.com/aperezdc/ngx-fancyindex.git
  show_progress "Last... Getting, compiling nginx, doing some tweaks etc. Be patient, will you!"
 mkdir ~/nginx-package/
 cd ~/nginx-package/
-wget http://openresty.org/download/ngx_openresty-1.7.7.1.tar.gz
-tar -xvzf ngx_openresty-1.7.7.1.tar.gz
+wget http://openresty.org/download/ngx_openresty-1.7.7.1.tar.gz &>> /dev/null
+tar -xvzf ngx_openresty-1.7.7.1.tar.gz &>> /dev/null
 cd ngx_openresty-1.7.7.1
 ./configure \
 --prefix=/  \
@@ -381,8 +382,8 @@ cd ngx_openresty-1.7.7.1
 --add-module=/root/ngx-build/nginx-dlna-module \
 --add-module=/root/ngx-build/nginx-rtmp-module \
 --add-module=/root/ngx-build/websockify-nginx-module \
---add-module=/root/ngx-build/nginx-upstream-fair 
-make
+--add-module=/root/ngx-build/nginx-upstream-fair  &>> /dev/null
+make &>> /dev/null
 #make install
 
 #mkdir /root/nginx-package/ngx_openresty-1.7.7.1/build/nginx- 1.7.7/conf/
@@ -403,9 +404,10 @@ chown -R www-data:www-data /var/ngx_pagespeed_cache
 
 # Now let's build nginx deb file. 
 # Warning, it's not set to auto-install as of now.
-checkinstall --fstrans=no --install=yes -y
+show_progress"Installing Nginx"
+checkinstall --fstrans=no --install=yes -y  &>> /dev/null
 
-
+show_progress "Creating Nginx startup script"
 ######################################### Add nginx to /etc/init.d for
 wget -O nginx.init https://raw.githubusercontent.com/Fleshgrinder/nginx-sysvinit-script/master/nginx
 mv nginx.init /etc/init.d/nginx
@@ -420,6 +422,64 @@ update-rc.d -f nginx defaults
 cp /root/ngx-build/naxsi/naxsi_config/naxsi_core.rules /etc/nginx
 
 
+
+cd ~/
+git clone https://github.com/nomadturk/nginx-conf.git
+cd nginx-conf
+mv -f * /etc/nginx/
+git clone https://github.com/h5bp/server-configs-nginx.git
+cd server-configs-nginx
+mv -f h5bp mime.types doc/ /etc/nginx
+cd ~/
+rm -r ~/nginx-conf
+
+
+
+
+
+show_progress "Uh oh... We forgot installing mysql. So... MariaDB it is!"
+cd ~/
+
+## MariaDB
+apt-get install python-software-properties &>> /dev/null
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db &>> /dev/null
+add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main' &>> /dev/null
+apt-get update &>> /dev/null
+apt-get -y --force-yes install mariadb-server &>> /dev/null
+
+show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
+## DotDeb Php 5.5, 
+add-apt-repository 'deb http://packages.dotdeb.org wheezy all' &>> /dev/null
+add-apt-repository 'deb http://packages.dotdeb.org wheezy-php55 all' &>> /dev/null
+wget http://www.dotdeb.org/dotdeb.gpg &>> /dev/null
+apt-key add dotdeb.gpg &>> /dev/null
+apt-get update &>> /dev/null
+apt-get -y --force-yes install php5-fpm php5-mysql php5-xcache memcached php5-memcache php5-memcached &>> /dev/null
+apt-get -y --force-yes install php5-mcrypt php5-cli php5-curl php5-gd php5-json php5-sqlite php5-pspell php5-readline php5-recode php5-xmlrpc php5-xsl php5-intl php5-imagick php5-tidy &>> /dev/null
+
+show_progress "Time for a bit of tweaks"
+sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
+sed -i "s/^;listen.owner = www-data/listen.owner = www-data/" /etc/php5/fpm/pool.d/www.conf
+sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool.d/www.conf
+sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
+sed -i "s/^;listen.backlog = 128/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
+sed -i "s/^;listen.backlog = 65535/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
+sed -i "s/^listen=.*$/listen = 127.0.0.1:9001/" /etc/php5/fpm/pool.d/www.conf 
+sed -i "s/^listen =.*$/listen = 127.0.0.1:9001/" /etc/php5/fpm/pool.d/www.conf 
+sed -i "s/^  access_log logs\/static.log/  access_log \/var\/log\/nginx\/static.log/" /etc/nginx/h5bp/location/expires.conf
+
+
+mkdir -p /var/www
+cp /usr/share/nginx/nginx/html/*.html /var/www/
+chown -R www-data:www-data /var/www/
+
+
+ 
+show_progress "Starting Nginx"
+service nginx start
+
+
+show_progress "Add nginx to logrotate"
 ######################################### Let's add nginx to logrotate and do an update
 echo "/var/log/nginx/*.log {" >> nginx.logrotate
 echo "        daily" >> nginx.logrotate
@@ -439,103 +499,13 @@ mv nginx.logrotate /etc/logrotate.d/nginx
 chmod 0644 /etc/logrotate.d/nginx
 logrotate -f -v /etc/logrotate.d/nginx
 #########################################
-
-cd ~/
-git clone https://github.com/nomadturk/nginx-conf.git
-cd nginx-conf
-mv -f * /etc/nginx/
-git clone https://github.com/h5bp/server-configs-nginx.git
-cd server-configs-nginx
-mv -f h5bp mime.types doc/ /etc/nginx
-cd ~/
-rm -r ~/nginx-conf
+show_progress "Done and done... Enjoy it. All is ready to go."
 
 
 
 
 
- show_progress "Uh oh... We forgot installing mysql. So... MariaDB it is!"
-cd ~/
-
-## MariaDB
-apt-get install python-software-properties
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
-apt-get update
-apt-get -y --force-yes install mariadb-server
-
- show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
-## DotDeb Php 5.5, 
-add-apt-repository 'deb http://packages.dotdeb.org wheezy all'
-add-apt-repository 'deb http://packages.dotdeb.org wheezy-php55 all'
-wget http://www.dotdeb.org/dotdeb.gpg
-apt-key add dotdeb.gpg
-apt-get update
-apt-get -y --force-yes install php5-fpm php5-mysql php5-xcache memcached php5-memcache php5-memcached
-apt-get -y --force-yes install php5-mcrypt php5-cli php5-curl php5-gd php5-json php5-sqlite php5-pspell php5-readline php5-recode php5-xmlrpc php5-xsl php5-intl php5-imagick php5-tidy
-
-sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
-sed -i "s/^;listen.owner = www-data/listen.owner = www-data/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.backlog = 128/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.backlog = 65535/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^listen=.*$/listen = 127.0.0.1:9001/" /etc/php5/fpm/pool.d/www.conf 
-sed -i "s/^listen =.*$/listen = 127.0.0.1:9001/" /etc/php5/fpm/pool.d/www.conf 
-sed -i "s/^  access_log logs\/static.log/  access_log \/var\/log\/nginx\/static.log/" /etc/nginx/h5bp/location/expires.conf
-
-
-mkdir -p /var/www
-cp /usr/share/nginx/nginx/html/*.html /var/www/
-chown -R www-data:www-data /var/www/
-
-
- 
-service nginx start
-
-
-
-
-
-
-
-
-
-
-
-
-# gem install fpm
-# 
-# INSTALL=/tmp/openresty
-# make install DESTDIR=$INSTALL
-# mkdir -p $INSTALL/var/lib/nginx
-# install -m 0555 -D ../nginx.init $INSTALL/etc/init.d/nginx
-# install -m 0555 -D ../nginx.logrotate $INSTALL/etc/logrotate.d/nginx
-
-# fpm -s dir -t deb -n openresty -v 1.7.7.1 --iteration 1 -C $INSTALL \
-# --description "Sunucu" \
-# -d libxslt1.1 \
-# -d libgd2-xpm \
-# -d libgeoip1 \
-# -d libpcre3 \
-# --config-files /etc/nginx/win-utf \
-# --config-files /etc/nginx/fastcgi_params \
-# --config-files /etc/nginx/nginx.conf \
-# --config-files /etc/nginx/koi-win \
-# --config-files /etc/nginx/koi-utf \
-# --config-files /etc/nginx/uwsgi_params \
-# --config-files /etc/nginx/mime.types \
-# --config-files /etc/nginx/scgi_params \
-# --config-files /etc/nginx/fastcgi.conf \
-# etc usr var
-
-
-
-
-
-
-
-
+# More info about RTMP
 #https://github.com/arut/nginx-rtmp-module
 #https://github.com/tg123/websockify-nginx-module
 #https://github.com/masterzen/nginx-upload-progress-module
