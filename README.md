@@ -12,6 +12,14 @@ php-fpm fixes (cgi.fix_pathinfo, change user to www-data)<br>
 <br>
 <br>
 <br>
+So far I've tested it on:
+Online.net Server Debian Installation<br>
+Kimsufi Debian 7.5 Installation<br>
+Linode Debian <br>
+Vultr Debian Servers<br>
+Miranis Openstacks Debian<br>
+DigitalOcean Debian Droplets (Eventhough DO gave me a lot off dropping connections from different locations whilst all my other ssh connections were flawless, all the test were success)<br>
+
 
 You can run it with:
 
