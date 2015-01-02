@@ -32,7 +32,7 @@ dpkg-reconfigure locales
  show_progress "Removing ffmpeg files if there any."
 apt-get update &>> /dev/null
 apt-get -y remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm &>> /dev/null
-apt-get -y --force-yes install software-properties-common python-software-properties
+apt-get -y --force-yes install software-properties-common python-software-properties &>> /dev/null
 # Let's install what's needed...
 
  show_progress "Adding multimedia repository and doing an apt-get update."
