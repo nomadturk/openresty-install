@@ -30,7 +30,11 @@ fi
 
 show_progress "The script will terminate if any error to happen."
 set -e
-
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+locale-gen en_US.UTF-8
+dpkg-reconfigure locales
 
 # Remove any existing packages:
 show_progress "Removing ffmpeg files if there any."
