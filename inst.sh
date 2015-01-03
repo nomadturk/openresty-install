@@ -3,19 +3,19 @@
 START=$(date +%s)
 
 # Yellow
-function show_progress()
+function  show_progress()
 {
 	echo $(tput setaf 3)$@$(tput sgr0)
 }
 
 # Blue
-function show_progress_info()
+function  show_progress_info()
 {
 	echo $(tput setaf 4)$@$(tput sgr0)
 }
 
 # Red color
-function show_progress_error()
+function  show_progress_error()
 {
 	echo $(tput setaf 1)$@$(tput sgr0)
 }
@@ -28,7 +28,7 @@ fi
 
 ###################################################################
 
- show_progress "The script will terminate if any error to happen."
+show_progress "The script will terminate if any error to happen."
 set -e
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
