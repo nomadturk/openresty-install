@@ -530,4 +530,8 @@ show_progress_info "You can login to webmin at https://YOURIP:10000 using your r
 
 END=$(date +%s)
 DIFF=$(( $END - $START ))
-show_progress_info "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..."
+echo Hurray! In mere $(($DIFF / 3600 )) hours $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds all is finished! Congrats dude... >>Time.log
+show_progress_info "$(cat Time.log)"
+#echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.log
+read -s -n 1 any_key | show_progress_info "Press a key to exit now..."
+exit
