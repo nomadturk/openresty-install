@@ -460,7 +460,7 @@ add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/d
 apt-get update
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
 END=$(date +%s) >>Time.Vars
-apt-get -y --force-yes install mariadb-server mariadb-client mariadb-
+apt-get -y --force-yes install mariadb-server mariadb-client mariadb-common
 # Start timer again.
 START2=$(date +%s) >>Time.Vars
 show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
