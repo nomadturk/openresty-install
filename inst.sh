@@ -1,6 +1,6 @@
 #!/bin/bash
 #Lets calculate how much time is spent
-START=$(date +%s)
+START=$(date +%s) >>TimeVars
 
 # Yellow
 function show_progress()
@@ -456,10 +456,10 @@ apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
 add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
 apt-get update
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
-END=$(date +%s)
+END=$(date +%s) >>TimeVars
 apt-get -y --force-yes install mariadb-server
 # Start timer again.
-START2=$(date +%s)
+START2=$(date +%s) >>TimeVars
 show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
 ## DotDeb Php 5.5, 
 add-apt-repository 'deb http://packages.dotdeb.org wheezy all'
@@ -515,14 +515,14 @@ logrotate -f -v /etc/logrotate.d/nginx
 
 show_progress "Done and done... Enjoy it. All is ready to go."
 
-END2=$(date +%s)
+END2=$(date +%s) >>TimeVars
 DIFF1=$(( $END - $START ))
 DIFF2=$(( $END2 - $START2 ))
 DIFF=$(( $DIFF1 + $DIFF2 ))
-echo Hurray! In mere $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds all is finished! Congrats dude... >>Time.log
-show_progress_info "$(cat Time.log)"
+echo Hurray! In mere $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds all is finished! Congrats dude... >>Time.Output
+show_progress_info "$(cat Time.Output)"
 show_progress_info "This is of course excluding the time spent at MariaDB Password input page."
-#echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.log
+#echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.Output
 read -s -n 1 any_key |show_progress_info "Press a key to exit now..."
 
 
