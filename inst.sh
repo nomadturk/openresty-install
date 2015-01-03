@@ -1,6 +1,7 @@
 #!/bin/bash
 #Lets calculate how much time is spent
-START=$(date +%s) >>Time.Vars
+START=$(date +%s) 
+echo $START >>Time.Vars
 
 # Yellow
 function show_progress()
@@ -459,10 +460,12 @@ apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
 add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
 apt-get update
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
-END=$(date +%s) >>Time.Vars
+END=$(date +%s)
+echo $END >>Time.Vars
 apt-get -y --force-yes install mariadb-server mariadb-client mariadb-common
 # Start timer again.
-START2=$(date +%s) >>Time.Vars
+START2=$(date +%s)
+echo $START2 >>Time.Vars
 show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
 ## DotDeb Php 5.5, 
 add-apt-repository 'deb http://packages.dotdeb.org wheezy all'
@@ -518,7 +521,8 @@ logrotate -f -v /etc/logrotate.d/nginx
 
 show_progress "Done and done... Enjoy it. All is ready to go."
 
-END2=$(date +%s) >>Time.Vars
+END2=$(date +%s)
+echo $END2 >>Time.Vars
 DIFF1=$(( $END - $START ))
 DIFF2=$(( $END2 - $START2 ))
 DIFF=$(( $DIFF1 + $DIFF2 ))
