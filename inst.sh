@@ -415,7 +415,7 @@ chown -R www-data:www-data /var/ngx_pagespeed_cache
 # Now let's build nginx deb file. 
 # Warning, it's not set to auto-install as of now.
 show_progress "Installing Nginx"
-checkinstall --pakgname=nginx --fstrans=no --install=yes -y  &>> /dev/null
+checkinstall --pkgname=nginx --fstrans=no --install=yes -y  &>> /dev/null
 
 show_progress "Creating Nginx startup script"
 ######################################### Add nginx to /etc/init.d for
