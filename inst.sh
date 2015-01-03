@@ -52,7 +52,6 @@ update-locale en_US.UTF-8
 
 # Remove any existing packages:
 show_progress "Removing ffmpeg files if there any."
-apt-get update
 apt-get -y --force-yes dist-upgrade
 apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm
 apt-get -y --force-yes install software-properties-common python-software-properties
@@ -458,21 +457,21 @@ cd ~/
 rm -r ~/nginx-conf
 
 
-
-
-
 show_progress "Uh oh... We forgot installing mysql. So... MariaDB it is!"
 cd ~/
-
 ## MariaDB
+DIFF1=$(( $END - $START ))
+echo Up till now it took $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds... >>Time1.Output
+show_progress_info "$(cat Time1.Output)"
 apt-get -y --force-yes install python-software-properties
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
+add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/debian wheezy main'
 apt-get update
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
 END=$(date +%s)
 echo $END >>Time.Vars
-apt-get -y --force-yes install mariadb-server mariadb-client mariadb-common
+apt-get -y --force-yes install mariadb-server 
+# mariadb-client mariadb-common
 # Start timer again.
 START2=$(date +%s)
 echo $START2 >>Time.Vars
