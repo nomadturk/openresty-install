@@ -451,7 +451,7 @@ apt-get -y --force-yes install python-software-properties &>> /dev/null
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db &>> /dev/null
 add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
 apt-get update &>> /dev/null
-apt-get -y --force-yes install mariadb-server &>> /dev/null
+apt-get -y --force-yes install mariadb-server
 
 show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
 ## DotDeb Php 5.5, 
