@@ -69,6 +69,7 @@ apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev liba
 
 
  show_progress "Start FFMpeg Installation"
+ show_progress "Depending on your CPU this might take a long while"
 ##################################################################Start FFMPEG 
 
 mkdir -p ~/src-build/build-ffmpeg
