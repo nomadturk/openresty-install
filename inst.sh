@@ -519,7 +519,7 @@ END2=$(date +%s)
 DIFF1=$(( $END - $START ))
 DIFF2=$(( $END2 - $START2 ))
 DIFF=$(( $DIFF1 + $DIFF2 ))
-echo Hurray! In mere $(($DIFF / 3600 )) hours $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds all is finished! Congrats dude... >>Time.log
+echo Hurray! In mere $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds all is finished! Congrats dude... >>Time.log
 show_progress_info "$(cat Time.log)"
 show_progress_info "This is of course excluding the time spent at MariaDB Password input page."
 #echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.log
