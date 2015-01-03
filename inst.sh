@@ -528,7 +528,6 @@ show_progress_info "$(cat TimeEcho.log)"
 show_progress_info "This is of course excluding the time spent at MariaDB Password input page."
 #echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>TimeEcho.log
 read -s -n 1 any_key |show_progress_info "Press a key to exit now..."
-exit
 
 
 
