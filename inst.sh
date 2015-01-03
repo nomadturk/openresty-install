@@ -1,6 +1,6 @@
 #!/bin/bash
 #Lets calculate how much time is spent
-START=$(date +%s) >>TimeVars
+START=$(date +%s) >>Time.Vars
 
 # Yellow
 function show_progress()
@@ -33,7 +33,10 @@ set -e
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+export LC_COLLATE=en_US.UTF-8
 locale-gen en_US.UTF-8
+update-locale en_US.UTF-8
+
 dpkg-reconfigure locales
 
 # Remove any existing packages:
@@ -100,7 +103,7 @@ make
 checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
   awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
   --fstrans=no --default
-show_progress "		Installing fdk-aac"
+show_progress "	Installing fdk-aac"
 ################################### fdk-aac
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
@@ -456,10 +459,10 @@ apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
 add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
 apt-get update
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
-END=$(date +%s) >>TimeVars
-apt-get -y --force-yes install mariadb-server
+END=$(date +%s) >>Time.Vars
+apt-get -y --force-yes install mariadb-server mariadb-client mariadb-
 # Start timer again.
-START2=$(date +%s) >>TimeVars
+START2=$(date +%s) >>Time.Vars
 show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
 ## DotDeb Php 5.5, 
 add-apt-repository 'deb http://packages.dotdeb.org wheezy all'
@@ -515,7 +518,7 @@ logrotate -f -v /etc/logrotate.d/nginx
 
 show_progress "Done and done... Enjoy it. All is ready to go."
 
-END2=$(date +%s) >>TimeVars
+END2=$(date +%s) >>Time.Vars
 DIFF1=$(( $END - $START ))
 DIFF2=$(( $END2 - $START2 ))
 DIFF=$(( $DIFF1 + $DIFF2 ))
