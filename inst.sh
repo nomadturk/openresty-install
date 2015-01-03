@@ -460,8 +460,8 @@ rm -r ~/nginx-conf
 show_progress "Uh oh... We forgot installing mysql. So... MariaDB it is!"
 cd ~/
 ## MariaDB
-DIFF1=$(( $END - $START ))
-echo Up till now it took $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds... >>Time1.Output
+DIFFX=$(( $END - $START )) 
+echo Up till now it took $(($DIFFX / 60 )) minutes and $(($DIFFX % 60 )) seconds... >>Time1.Output
 show_progress_info "$(cat Time1.Output)"
 apt-get -y --force-yes install python-software-properties
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
@@ -532,9 +532,9 @@ show_progress "Done and done... Enjoy it. All is ready to go."
 
 END2=$(date +%s)
 echo $END2 >>Time.Vars
-DIFF1=$(( $END - $START ))
-DIFF2=$(( $END2 - $START2 ))
-DIFF=$(( $DIFF1 + $DIFF2 ))
+DIFF1=$(( END - START ))
+DIFF2=$(( END2 - START2 ))
+DIFF=$(( DIFF1 + DIFF2 ))
 echo Hurray! In mere $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds all is finished! Congrats dude... >>Time.Output
 show_progress_info "$(cat Time.Output)"
 show_progress_info "This is of course excluding the time spent at MariaDB Password input page."
