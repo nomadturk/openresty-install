@@ -511,22 +511,10 @@ wget http://software.virtualmin.com/gpl/scripts/install.sh -O webmin.sh
 
 sed -i "s/^debdeps=\"postfix postfix-pcre webmin usermin ruby libapache2-mod-ruby libxml-simple-perl libcrypt-ssleay-perl unzip zip libfcgi-dev bind9 spamassassin spamc procmail procmail-wrapper libnet-ssleay-perl libpg-perl libdbd-pg-perl libdbd-mysql-perl quota iptables openssl python mailman subversion ruby irb rdoc ri mysql-server mysql-client mysql-common postgresql postgresql-client awstats webalizer dovecot-common dovecot-imapd dovecot-pop3d proftpd libcrypt-ssleay-perl awstats clamav-base clamav-daemon clamav clamav-freshclam clamav-docs clamav-testfiles libapache2-mod-fcgid apache2-suexec-custom scponly apache2 apache2-doc libapache2-svn libsasl2-2 libsasl2-modules sasl2-bin php-pear php5 php5-cgi libgd2-xpm libapache2-mod-php5 php5-mysql\"/debdeps=\"postfix postfix-pcre webmin usermin ruby libapache2-mod-ruby libxml-simple-perl libcrypt-ssleay-perl unzip zip libfcgi-dev bind9 spamassassin spamc procmail procmail-wrapper libnet-ssleay-perl libpg-perl libdbd-pg-perl libdbd-mysql-perl quota iptables openssl python mailman subversion ruby irb rdoc ri postgresql postgresql-client awstats webalizer dovecot-common dovecot-imapd dovecot-pop3d proftpd libcrypt-ssleay-perl clamav-base clamav-daemon awstats clamav clamav-freshclam clamav-docs clamav-testfiles libapache2-mod-fcgid apache2-suexec-custom scponly apache2 apache2-doc libapache2-svn libsasl2-2 libsasl2-modules sasl2-bin php-pear php5 php5-cgi libgd2-xpm libapache2-mod-php5 php5-mysql\"/" webmin.sh
 chmod +x webmin.sh
-./webmin.sh &
-wait %1
-
-
-
+./webmin.sh
 
 show_progress "Done and done... Enjoy it. All is ready to go."
 show_progress_info "You can login to webmin at https://YOURIP:10000 using your root cridentials"
-
-
-
-# More info about RTMP
-#https://github.com/arut/nginx-rtmp-module
-#https://github.com/tg123/websockify-nginx-module
-#https://github.com/masterzen/nginx-upload-progress-module
-#http://pkula.blogspot.com.tr/2013/06/live-video-stream-from-raspberry-pi.html
 
 END=$(date +%s)
 DIFF=$(( $END - $START ))
@@ -535,3 +523,11 @@ show_progress_info "$(cat Time.log)"
 #echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.log
 read -s -n 1 any_key | show_progress_info "Press a key to exit now..."
 exit
+
+
+
+# More info about RTMP
+#https://github.com/arut/nginx-rtmp-module
+#https://github.com/tg123/websockify-nginx-module
+#https://github.com/masterzen/nginx-upload-progress-module
+#http://pkula.blogspot.com.tr/2013/06/live-video-stream-from-raspberry-pi.html
