@@ -3,19 +3,19 @@
 START=$(date +%s)
 
 # Yellow
-function  show_progress()
+function show_progress()
 {
 	echo $(tput setaf 3)$@$(tput sgr0)
 }
 
 # Blue
-function  show_progress_info()
+function show_progress_info()
 {
 	echo $(tput setaf 4)$@$(tput sgr0)
 }
 
 # Red color
-function  show_progress_error()
+function show_progress_error()
 {
 	echo $(tput setaf 1)$@$(tput sgr0)
 }
@@ -28,7 +28,7 @@ fi
 
 ###################################################################
 
-show_progress "The script will terminate if any error to happen."
+ show_progress "The script will terminate if any error to happen."
 set -e
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -451,8 +451,8 @@ show_progress "Uh oh... We forgot installing mysql. So... MariaDB it is!"
 cd ~/
 
 ## MariaDB
-apt-get -y --force-yes install python-software-properties &>> /dev/null
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db &>> /dev/null
+apt-get -y --force-yes install python-software-properties
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
 add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
 apt-get update &>> /dev/null
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
@@ -465,9 +465,9 @@ show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
 add-apt-repository 'deb http://packages.dotdeb.org wheezy all'
 add-apt-repository 'deb http://packages.dotdeb.org wheezy-php55 all'
 wget http://www.dotdeb.org/dotdeb.gpg
-apt-key add dotdeb.gpg 
-apt-get update &>> /dev/null
-apt-get -y --force-yes install php5-fpm php5-mysql php5-xcache memcached php5-memcache php5-memcached 
+apt-key add dotdeb.gpg
+apt-get update
+apt-get -y --force-yes install php5-fpm php5-mysql php5-xcache memcached php5-memcache php5-memcached
 apt-get -y --force-yes install php5-mcrypt php5-cli php5-curl php5-gd php5-json php5-sqlite php5-pspell php5-readline php5-recode php5-xmlrpc php5-xsl php5-intl php5-imagick php5-tidy
 
 show_progress "Time for a bit of tweaks"
