@@ -28,7 +28,7 @@ fi
 
 ###################################################################
 
- show_progress "The script will terminate if any error to happen."
+show_progress "The script will terminate if any error to happen."
 set -e
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -37,103 +37,103 @@ locale-gen en_US.UTF-8
 dpkg-reconfigure locales
 
 # Remove any existing packages:
- show_progress "Removing ffmpeg files if there any."
-apt-get update &>> /dev/null
-apt-get -y --force-yes dist-upgrade &>> /dev/null
-apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm &>> /dev/null
-apt-get -y --force-yes install software-properties-common python-software-properties &>> /dev/null
+show_progress "Removing ffmpeg files if there any."
+apt-get update
+apt-get -y --force-yes dist-upgrade
+apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm
+apt-get -y --force-yes install software-properties-common python-software-properties
 # Let's install what's needed...
 
- show_progress "Adding multimedia repository and doing an apt-get update."
-add-apt-repository 'deb http://www.deb-multimedia.org wheezy main non-free' &>> /dev/null
-apt-get update &>> /dev/null
-apt-get -y --force-yes install deb-multimedia-keyring &>> /dev/null
+show_progress "Adding multimedia repository and doing an apt-get update."
+add-apt-repository 'deb http://www.deb-multimedia.org wheezy main non-free'
+apt-get update
+apt-get -y --force-yes install deb-multimedia-keyring
 
 
 show_progress "Installing necessary packages apt-get update, please wait..."
-apt-get -y --force-yes install build-essential checkinstall git libfaac-dev libjack-jackd2-dev &>> /dev/null
+apt-get -y --force-yes install build-essential checkinstall git libfaac-dev libjack-jackd2-dev
 show_progress "Installing necessary packages apt-get update, please wait......."
-apt-get -y --force-yes install libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev &>> /dev/null
+apt-get -y --force-yes install libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev
 show_progress "Installing necessary packages apt-get update, please wait.........."
-apt-get -y --force-yes install libvorbis-dev texi2html zlib1g-dev autoconf automake g++ bzip2 libfreetype6-dev libgpac-dev libtool pkg-config &>> /dev/null
+apt-get -y --force-yes install libvorbis-dev texi2html zlib1g-dev autoconf automake g++ bzip2 libfreetype6-dev libgpac-dev libtool pkg-config
 show_progress "Installing necessary packages apt-get update, please wait............."
-apt-get -y --force-yes install libssl1.0.0 libssl-dev libxvidcore-dev libxvidcore4 libass-dev librtmp-dev &>> /dev/null
+apt-get -y --force-yes install libssl1.0.0 libssl-dev libxvidcore-dev libxvidcore4 libass-dev librtmp-dev
 show_progress "Installing necessary packages apt-get update, please wait................"
-apt-get -y --force-yes install libpcre3 libpcre3-dev unzip tar zip libpcrecpp0 &>> /dev/null
+apt-get -y --force-yes install libpcre3 libpcre3-dev unzip tar zip libpcrecpp0
 show_progress "Installing necessary packages apt-get update, please wait..................."
-apt-get -y --force-yes install libreadline-dev libncurses5-dev perl make libjpeg-dev libjpeg-progs devscripts graphicsmagick-imagemagick-compat &>> /dev/null
+apt-get -y --force-yes install libreadline-dev libncurses5-dev perl make libjpeg-dev libjpeg-progs devscripts graphicsmagick-imagemagick-compat
 show_progress "Installing necessary packages apt-get update, please wait......................"
-apt-get -y --force-yes install graphicsmagick-libmagick-dev-compat libpam0g-dev libpng-dev libpng12-0 libpng12-dev libxml2-dev &>> /dev/null
+apt-get -y --force-yes install graphicsmagick-libmagick-dev-compat libpam0g-dev libpng-dev libpng12-0 libpng12-dev libxml2-dev
 show_progress "Installing necessary packages apt-get update, please wait........................."
-apt-get -y --force-yes install libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxslt-dev openssl libgd2-xpm-dev &>> /dev/null
+apt-get -y --force-yes install libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxslt-dev openssl libgd2-xpm-dev
 show_progress "Installing necessary packages apt-get update, please wait............................"
-apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52 libswresample0 libgsm1-dev libbz2-dev &>> /dev/null
+apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52 libswresample0 libgsm1-dev libbz2-dev
 show_progress "Installing necessary packages apt-get update, please wait..............................."
-apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev &>> /dev/null
+apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev
 
 
- show_progress "Start FFMpeg Installation"
- show_progress "Depending on your CPU this might take a long while"
+show_progress "Start FFMpeg Installation"
+show_progress "Depending on your CPU this might take a long while"
 ##################################################################Start FFMPEG 
 
 mkdir -p ~/src-build/build-ffmpeg
 mkdir -p /root/ngx-build/
 #apt-get install yasm
- show_progress "		Installing yasm"
+show_progress "		Installing yasm"
 ################################### First, install yasm
 cd ~/src-build/build-ffmpeg
 git clone git://github.com/yasm/yasm.git
 cd yasm
-./autogen.sh &>> /dev/null
-./configure &>> /dev/null
-make &>> /dev/null
+./autogen.sh
+./configure
+make
 checkinstall --pkgname=yasm --pkgversion="1.3.0" --backup=no \
   --deldoc=yes --fstrans=no --default
   
- show_progress "		Installing libx246"
+show_progress "		Installing libx246"
 ################################### libx264
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 git://git.videolan.org/x264
 cd x264
-./configure --enable-static &>> /dev/null
-make &>> /dev/null
+./configure --enable-static
+make
 checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
   awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
   --fstrans=no --default
- show_progress "		Installing fdk-aac"
+show_progress "		Installing fdk-aac"
 ################################### fdk-aac
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
 cd fdk-aac
-./autogen.sh &>> /dev/null
-autoreconf -fiv &>> /dev/null
-./configure --disable-shared &>> /dev/null
-make &>> /dev/null
+./autogen.sh
+autoreconf -fiv
+./configure --disable-shared
+make
 checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
- show_progress "		Installing libvpx" 
+show_progress "		Installing libvpx" 
 ################################### libvpx
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 http://git.chromium.org/webm/libvpx.git
 cd libvpx
-./configure --disable-examples --disable-unit-tests &>> /dev/null
-make &>> /dev/null
+./configure --disable-examples --disable-unit-tests
+make
 checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
 
-  show_progress "		Installing opus"
+ show_progress "		Installing opus"
 ################################### opus
 cd ~/src-build/build-ffmpeg
 git clone --depth 1 git://git.xiph.org/opus.git
 cd opus
-./autogen.sh &>> /dev/null
-./configure --disable-shared &>> /dev/null
+./autogen.sh
+./configure --disable-shared
 make
 checkinstall --pkgname=libopus --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
 
 
-# show_progress "		Installing libmp3lame"
+#show_progress "		Installing libmp3lame"
 ################################### libmp3lame
 # doesn't install in ubuntu, ends up with an error
 #apt-get -y --force-yes install nasm
@@ -145,21 +145,21 @@ checkinstall --pkgname=libopus --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=n
 #make
 #checkinstall --fstrans=no --pkgname=lame-ffmpeg --pkgversion="3.98.4" --backup=no --default --deldoc=yes
 
- show_progress "		Installing librtmp"
+show_progress "		Installing librtmp"
 #################################### librtmp
 cd ~/src-build/build-ffmpeg
-git clone git://git.ffmpeg.org/rtmpdump &>> /dev/null
+git clone git://git.ffmpeg.org/rtmpdump
 cd rtmpdump
-make SYS=posix &>> /dev/null
+make SYS=posix
 checkinstall --pkgname=rtmpdump --pkgversion="2:$(date +%Y%m%d%H%M)-git" --backup=no \
     --deldoc=yes --fstrans=no --default
 
 export LD_LIBRARY_PATH=/usr/local/lib/
 
- show_progress "Now... Using all above, compiling FFMpeg"
+show_progress "Now... Using all above, compiling FFMpeg"
 ################################### Finally, ffmpeg
 cd ~/src-build/build-ffmpeg
-git clone https://github.com/FFmpeg/FFmpeg.git &>> /dev/null
+git clone https://github.com/FFmpeg/FFmpeg.git
 cd FFmpeg
 ./configure \
   --enable-gpl \
@@ -183,8 +183,8 @@ cd FFmpeg
   --enable-libgsm \
   --enable-zlib \
   --enable-swscale \
-  --enable-pthreads &>> /dev/null
-make &>> /dev/null
+  --enable-pthreads
+make
 checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
 hash -r
@@ -194,9 +194,9 @@ hash -r
 
 
 
- show_progress "Installing ImageMagick"
+show_progress "Installing ImageMagick"
 ################################################################### IMAGEMAGICK
-# show_progress "		Installing jpegsrc"
+#show_progress "		Installing jpegsrc"
 ######################################### JPEGSRC
 #cd ~/src-build/
 #wget http://www.ijg.org/files/jpegsrc.v9a.tar.gz
@@ -209,26 +209,26 @@ hash -r
 
 
 ######################################### LINUNWIND & GPERFTOOLS
- show_progress "		Installing libunwind"
+show_progress "		Installing libunwind"
 mkdir -p ~/src-build/gperftools
 cd ~/src-build/gperftools
 #wget -c http://ftp.twaren.net/Unix/NonGNU/libunwind/libunwind-1.1.tar.gz
 #tar zxvf libunwind-1.1.tar.gz
-git clone git://git.sv.gnu.org/libunwind.git &>> /dev/null
+git clone git://git.sv.gnu.org/libunwind.git
 cd libunwind
-./autogen.sh &>> /dev/null
-./configure CFLAGS=-U_FORTIFY_SOURCE &>> /dev/null
-make  &>> /dev/null
-make install &>> /dev/null
+./autogen.sh
+./configure CFLAGS=-U_FORTIFY_SOURCE
+make 
+make install
 
- show_progress "		Installing gperftools"
+show_progress "		Installing gperftools"
 cd ~/src-build/gperftools
-git clone https://code.google.com/p/gperftools-git/ &>> /dev/null
+git clone https://code.google.com/p/gperftools-git/
 cd gperftools-git
-./autogen.sh &>> /dev/null
-./configure --prefix=/usr/local/gperftools --enable-shared --enable-frame-pointers &>> /dev/null
-make  &>> /dev/null
-make install &>> /dev/null
+./autogen.sh
+./configure --prefix=/usr/local/gperftools --enable-shared --enable-frame-pointers
+make 
+make install
 cp -r /usr/local/gperftools/lib/* /usr/local/lib/
 
 mkdir /tmp/tcmalloc
@@ -236,26 +236,26 @@ chmod 0777 /tmp/tcmalloc/
 chown -R www-data:www-data /tmp/tcmalloc
 
 show_progress "		Installing apt-get additions for gperftools"
-apt-get -y --force-yes install google-perftools libgoogle-perftools-dev &>> /dev/null
+apt-get -y --force-yes install google-perftools libgoogle-perftools-dev
 export PPROF_PATH=/usr/local/bin/pprof
 ######################################### 
 
- show_progress "		Installing webp"
+show_progress "		Installing webp"
 cd ~/src-build/
 #wget http://downloads.webmproject.org/releases/webp/libwebp-0.4.2.tar.gz
 #tar -xvzf libwebp-0.4.2.tar.gz
 git clone https://github.com/webmproject/libwebp.git
 cd libwebp
-./autogen.sh &>> /dev/null
-./configure &>> /dev/null
-make &>> /dev/null
-make install	 &>> /dev/null
+./autogen.sh
+./configure
+make
+make install	
 
- show_progress "Compile ImageMagick, shall we?"
+show_progress "Compile ImageMagick, shall we?"
 #########################################  ImageMagick
 cd ~/src-build/
-wget -c http://www.imagemagick.org/download/ImageMagick.tar.gz &>> /dev/null
-tar -zxvf ImageMagick.tar.gz &>> /dev/null
+wget -c http://www.imagemagick.org/download/ImageMagick.tar.gz
+tar -zxvf ImageMagick.tar.gz
 cd ImageMagick*
 ./configure --prefix=/usr/local/ImageMagick/     \
 	--sysconfdir=/etc \
@@ -265,60 +265,60 @@ cd ImageMagick*
 	--with-webp \
 	--with-gslib \
 	--with-perl=/usr/bin/perl \
-	--disable-static &>> /dev/null
-make &>> /dev/null
+	--disable-static
+make
 #checkinstall --fstrans=no --install=no -y 
-make install &>> /dev/null
+make install
 #cd ~/src-build/
 #rm -rf ImageMagick-*
 ######################################### 
 
 
- show_progress "Now, let's start Nginx installation"
- show_progress "		Installing OpenSSL"
+show_progress "Now, let's start Nginx installation"
+show_progress "		Installing OpenSSL"
 ######################################### OpenSSL
 cd /root/ngx-build/
-git clone https://github.com/openssl/openssl.git &>> /dev/null
+git clone https://github.com/openssl/openssl.git
 
- show_progress "		Installing ngx_pagespeed"
+show_progress "		Installing ngx_pagespeed"
 ######################################### ngx_pagespeed
 cd /root/ngx-build/
-wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.2-beta.zip &>> /dev/null
-unzip release-1.9.32.2-beta.zip &>> /dev/null
+wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.2-beta.zip
+unzip release-1.9.32.2-beta.zip
 cd ngx_pagespeed-release-1.9.32.2-beta/
- show_progress "		Installing psol for ngx_pagespeed"
-wget https://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz &>> /dev/null
-tar -xzvf 1.9.32.2.tar.gz   &>> /dev/null # extracts to psol/
+show_progress "		Installing psol for ngx_pagespeed"
+wget https://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz
+tar -xzvf 1.9.32.2.tar.gz   # extracts to psol/
 
 
 ######################################### Necessary modules from GitHub
- show_progress "Git cloning modules"
+show_progress "Git cloning modules"
 #cd /root/ngx-build/
 #git clone https://github.com/openresty/headers-more-nginx-module.git
 #cd /root/ngx-build/
 #git clone https://github.com/openresty/echo-nginx-module.git
 cd /root/ngx-build/
-git clone https://github.com/nbs-system/naxsi.git &>> /dev/null
+git clone https://github.com/nbs-system/naxsi.git
 cd /root/ngx-build/
-git clone https://github.com/arut/nginx-dav-ext-module.git &>> /dev/null
+git clone https://github.com/arut/nginx-dav-ext-module.git
 cd /root/ngx-build/
-git clone https://github.com/slact/nginx_http_push_module.git &>> /dev/null
+git clone https://github.com/slact/nginx_http_push_module.git
 cd /root/ngx-build/
-git clone https://github.com/arut/nginx-rtmp-module.git &>> /dev/null
+git clone https://github.com/arut/nginx-rtmp-module.git
 cd /root/ngx-build/
-git clone https://github.com/arut/nginx-dlna-module.git &>> /dev/null
+git clone https://github.com/arut/nginx-dlna-module.git
 cd /root/ngx-build/
-git clone https://github.com/tg123/websockify-nginx-module.git &>> /dev/null
+git clone https://github.com/tg123/websockify-nginx-module.git
 cd /root/ngx-build/
-git clone https://github.com/masterzen/nginx-upload-progress-module.git &>> /dev/null
+git clone https://github.com/masterzen/nginx-upload-progress-module.git
 cd /root/ngx-build/
-git clone https://github.com/gnosek/nginx-upstream-fair.git &>> /dev/null
+git clone https://github.com/gnosek/nginx-upstream-fair.git
 cd /root/ngx-build/
-git clone https://github.com/wandenberg/nginx-video-thumbextractor-module.git &>> /dev/null
+git clone https://github.com/wandenberg/nginx-video-thumbextractor-module.git
 cd /root/ngx-build/
-git clone https://github.com/FRiCKLE/ngx_cache_purge.git &>> /dev/null
+git clone https://github.com/FRiCKLE/ngx_cache_purge.git
 cd /root/ngx-build/
-git clone https://github.com/aperezdc/ngx-fancyindex.git &>> /dev/null
+git clone https://github.com/aperezdc/ngx-fancyindex.git
 
 
 
@@ -328,11 +328,11 @@ git clone https://github.com/aperezdc/ngx-fancyindex.git &>> /dev/null
 
 
 
- show_progress "Last... Getting, compiling nginx, doing some tweaks etc. Be patient, will you!"
+show_progress "Last... Getting, compiling nginx, doing some tweaks etc. Be patient, will you!"
 mkdir ~/nginx-package/
 cd ~/nginx-package/
-wget http://openresty.org/download/ngx_openresty-1.7.7.1.tar.gz &>> /dev/null
-tar -xvzf ngx_openresty-1.7.7.1.tar.gz &>> /dev/null
+wget http://openresty.org/download/ngx_openresty-1.7.7.1.tar.gz
+tar -xvzf ngx_openresty-1.7.7.1.tar.gz
 cd ngx_openresty-1.7.7.1
 ./configure \
 --prefix=/usr/local/nginx/  \
@@ -392,8 +392,8 @@ cd ngx_openresty-1.7.7.1
 --add-module=/root/ngx-build/nginx-dlna-module \
 --add-module=/root/ngx-build/nginx-rtmp-module \
 --add-module=/root/ngx-build/websockify-nginx-module \
---add-module=/root/ngx-build/nginx-upstream-fair  &>> /dev/null
-make &>> /dev/null
+--add-module=/root/ngx-build/nginx-upstream-fair 
+make
 #make install
 
 #mkdir /root/nginx-package/ngx_openresty-1.7.7.1/build/nginx- 1.7.7/conf/
@@ -415,7 +415,7 @@ chown -R www-data:www-data /var/ngx_pagespeed_cache
 # Now let's build nginx deb file. 
 # Warning, it's not set to auto-install as of now.
 show_progress "Installing Nginx"
-checkinstall 	--fstrans=no --install=yes -y  &>> /dev/null
+checkinstall 	--fstrans=no --install=yes -y 
 
 show_progress "Creating Nginx startup script"
 ######################################### Add nginx to /etc/init.d for
@@ -454,7 +454,7 @@ cd ~/
 apt-get -y --force-yes install python-software-properties
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
 add-apt-repository 'deb http://lon1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
-apt-get update &>> /dev/null
+apt-get update
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
 END=$(date +%s)
 apt-get -y --force-yes install mariadb-server
@@ -523,7 +523,7 @@ echo Hurray! In mere $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds all i
 show_progress_info "$(cat Time.log)"
 show_progress_info "This is of course excluding the time spent at MariaDB Password input page."
 #echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.log
-read -s -n 1 any_key | show_progress_info "Press a key to exit now..."
+read -s -n 1 any_key |show_progress_info "Press a key to exit now..."
 
 
 
