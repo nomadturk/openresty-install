@@ -2,9 +2,6 @@
 # Start calculating how much time is spent
 START=$(date +%s) >> Times.log
 
-# Connect to whatever screen is available.
-screen -RR
-
 # Yellow
 functionshow_progress()
 {
