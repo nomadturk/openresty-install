@@ -527,5 +527,5 @@ show_progress_info "You can login to webmin at https://YOURIP:10000 using your r
 #http://pkula.blogspot.com.tr/2013/06/live-video-stream-from-raspberry-pi.html
 
 END=$(date +%s)
-DIFF=$(( $END - $START )/60)
-show_progress_info "Hurray! In mere $DIFF minutes all is finished! Congrats dude..."
+DIFF=$(( $END - $START ))
+show_progress_info "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..."
