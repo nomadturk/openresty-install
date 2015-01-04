@@ -27,4 +27,11 @@ update-locale en_US.UTF-8
 echo $(tput setaf 1)The installer is now gonna run in a screen. You can detach or if your connection to ever drop you can reconnect to this screen with the command:$(tput setaf 2) screen -RR $(tput sgr0)&>> /dev/null 
 #bash inst.sh
 chmod +x inst.sh
-screen -a -A -S InstallScreen -U ./inst.sh
+killall screen
+screen -d -m -S InstallScreen bash -c "bash inst.sh"
+screen -RR
+echo "Now...  If you see this, it means I couldn automatically get back to screen."
+echo "Just use one of the below"
+echo "screen -RR" 
+echo "screen -R"
+echo "screen -r InstallScreen"
