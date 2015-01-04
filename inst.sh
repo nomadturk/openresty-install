@@ -400,7 +400,7 @@ show_progress "Last... Getting, compiling nginx, doing some tweaks etc. Be patie
 mkdir ~/nginx-package/
 cd ~/nginx-package/
 
-if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ] && [ "$LINUX_ARCH" != "powerpc" ] && [ "$LINUX_ARCH" != "powerpc64" ] && [ "$LINUX_ARCH" != "sparc" ] && [ "$LINUX_ARCH" != "aarch64" ] && [ "$LINUX_ARCH" != "s390" ] && [ "$LINUX_ARCH" != "hppa*" ] && [ "$LINUX_ARCH" != "alpha*" ]; then
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
 	#Ubuntu
 	show_progress_error "Warning, Openresty can not be compiled with pcre-jit module on PowerPC, replacing it with Nginx!"
 	show_progress_error "Also ngx_pagespeed won't compile on ppc architecture either. So skipping it..."
@@ -587,25 +587,35 @@ cd ~/
 DIFFX=$(( $END - $START )) 
 echo Up till now it took $(($DIFFX / 60 )) minutes and $(($DIFFX % 60 )) seconds... >>Time1.Output
 show_progress_info "$(cat Time1.Output)"
-apt-get -y --force-yes install python-software-properties
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
 
-# Let's install what's needed...
-if [ "$LINUX_DISTRO" == "Debian" ]; then
+
+
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
+	show_progress_error "Can install MariaDB to this system using external repos. Let's try if your own repos have anything to offer"
+	apt-get -y --force-yes mariadb-server
+	echo "whatever theheck"
+else
+	apt-get -y --force-yes install python-software-properties
+	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+	
+	if [ "$LINUX_DISTRO" == "Debian" ]; then
 	#Debian 
-	show_progress "Adding MariaDB Wheezy Repository"
-	add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/debian wheezy main'
-elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
-	#Ubuntu
-	show_progress "Adding MariaDB Trusty Repository"
-	add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
+		show_progress "Adding MariaDB Wheezy Repository"
+		add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/debian wheezy main'
+		apt-get update
+	elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
+		#Ubuntu
+		show_progress "Adding MariaDB Trusty Repository"
+		add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
+		apt-get update
+	fi
+	apt-get -y --force-yes install mariadb-server 
 fi
 
-apt-get update
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
 END=$(date +%s)
 echo $END >>Time.Vars
-apt-get -y --force-yes install mariadb-server 
+
 # mariadb-client mariadb-common
 # Start timer again.
 START2=$(date +%s)
