@@ -3,8 +3,8 @@ cd ~/
 apt-get update
 apt-get -y --force-yes upgrade
 apt-get -y --force-yes install screen nano
-#rm inst.sh* 
-#wget --no-check-certificate https://raw.githubusercontent.com/nomadturk/openresty-install/master/inst.sh
+rm inst.sh* 
+wget --no-check-certificate https://raw.githubusercontent.com/nomadturk/openresty-install/master/inst.sh
 
 
 # Some systems problems with locales. So lets try to add them just to run smoother.
