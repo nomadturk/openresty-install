@@ -1,20 +1,32 @@
 #!/bin/bash
 # Yellow
-function show_progress()
+function show_progress ()
 {
 	echo $(tput setaf 3)$@$(tput sgr0)
 }
 
-# Blue
-function show_progress_info()
+# Torquise
+function show_progress_info ()
 {
-	echo $(tput setaf 4)$@$(tput sgr0)
+	echo $(tput setaf 6)$@$(tput sgr0)
 }
 
 # Red color
-function show_progress_error()
+function show_progress_error ()
 {
 	echo $(tput setaf 1)$@$(tput sgr0)
+}
+# Red Background color
+function show_progress_error2 ()
+{
+	echo $(tput setb 4)$@$(tput sgr0)
+}
+
+# Loader
+function show_progress_loader ()
+{
+	echo $(tput setb 4)$(tput setaf 1)$@$(tput sgr0)
+
 }
 
 # Checking permissions
@@ -92,25 +104,25 @@ fi
 
 
 
-show_progress "Installing necessary packages apt-get update, please wait..."
+show_progress_loader "Installing necessary packages apt-get update, please wait..."
 apt-get -y --force-yes install build-essential checkinstall git libfaac-dev libjack-jackd2-dev
-show_progress "Installing necessary packages apt-get update, please wait......."
+show_progress_loader "Installing necessary packages apt-get update, please wait......."
 apt-get -y --force-yes install libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev
-show_progress "Installing necessary packages apt-get update, please wait.........."
+show_progress_loader "Installing necessary packages apt-get update, please wait.........."
 apt-get -y --force-yes install libvorbis-dev texi2html zlib1g-dev autoconf automake g++ bzip2 libfreetype6-dev libgpac-dev libtool pkg-config
-show_progress "Installing necessary packages apt-get update, please wait............."
+show_progress_loader "Installing necessary packages apt-get update, please wait............."
 apt-get -y --force-yes install libssl1.0.0 libssl-dev libxvidcore-dev libxvidcore4 libass-dev librtmp-dev
-show_progress "Installing necessary packages apt-get update, please wait................"
+show_progress_loader "Installing necessary packages apt-get update, please wait................"
 apt-get -y --force-yes install libpcre3 libpcre3-dev unzip tar zip libpcrecpp0
-show_progress "Installing necessary packages apt-get update, please wait..................."
+show_progress_loader "Installing necessary packages apt-get update, please wait..................."
 apt-get -y --force-yes install libreadline-dev libncurses5-dev perl make libjpeg-dev libjpeg-progs devscripts graphicsmagick-imagemagick-compat
-show_progress "Installing necessary packages apt-get update, please wait......................"
+show_progress_loader "Installing necessary packages apt-get update, please wait......................"
 apt-get -y --force-yes install graphicsmagick-libmagick-dev-compat libpam0g-dev libpng-dev libpng12-0 libpng12-dev libxml2-dev
-show_progress "Installing necessary packages apt-get update, please wait........................."
+show_progress_loader "Installing necessary packages apt-get update, please wait........................."
 apt-get -y --force-yes install libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxslt-dev openssl libgd2-xpm-dev
-show_progress "Installing necessary packages apt-get update, please wait............................"
+show_progress_loader "Installing necessary packages apt-get update, please wait............................"
 apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52  libgsm1-dev libbz2-dev
-show_progress "Installing necessary packages apt-get update, please wait..............................."
+show_progress_loader "Installing necessary packages apt-get update, please wait..............................."
 apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev 
 
 
