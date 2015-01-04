@@ -358,7 +358,8 @@ wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.2-beta.zi
 unzip release-1.9.32.2-beta.zip
 cd ngx_pagespeed-release-1.9.32.2-beta/
 show_progress "		Installing psol for ngx_pagespeed"
-wget --no-check-certificate https://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz
+# Can change it with the https one. But it is slower.
+wget http://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz
 tar -xzvf 1.9.32.2.tar.gz   # extracts to psol/
 
 
