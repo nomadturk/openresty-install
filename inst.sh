@@ -593,7 +593,6 @@ show_progress_info "$(cat Time1.Output)"
 if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
 	show_progress_error "Can install MariaDB to this system using external repos. Let's try if your own repos have anything to offer"
 	apt-get -y --force-yes mariadb-server
-	echo "whatever theheck"
 else
 	apt-get -y --force-yes install python-software-properties
 	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
@@ -691,7 +690,7 @@ echo Hurray! In mere $(($DIFF / 60 )) minutes and $(($DIFF % 60 )) seconds all i
 show_progress_info "$(cat Time.Output)"
 show_progress_info "This is of course excluding the time spent at MariaDB Password input page."
 #echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.Output
-read -s -n 1 any_key |show_progress_info "Press a key to exit now..."
+read -s -n 1 any_key | show_progress_info "Press a key to exit now..." && wait
 
 
 
