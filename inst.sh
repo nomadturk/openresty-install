@@ -225,11 +225,11 @@ checkinstall --pkgname=libopus --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=n
 show_progress "		Installing librtmp"
 #################################### librtmp
 # Let's install what's needed...
-if [ "$LINUX_ARCH" == "ppc64le" ]; then
-	#Ubuntu
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
+	# Systems such as ppc64 does have trouble compiling this...
 	show_progress_error "Warning! This will affect the total time since instead of compiling, I will be using the librtmp-dev from the repos"
+	apt-get install librtmp-dev
 else
-	#Debian 
 	cd ~/src-build/build-ffmpeg
 	git clone git://git.ffmpeg.org/rtmpdump
 	cd rtmpdump
