@@ -1,8 +1,4 @@
 #!/bin/bash
-#Lets calculate how much time is spent
-START=$(date +%s) 
-echo $START >>Time.Vars
-
 # Yellow
 function show_progress()
 {
@@ -71,6 +67,11 @@ show_progress "Removing ffmpeg files if there any."
 apt-get -y --force-yes dist-upgrade
 apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm
 apt-get -y --force-yes install software-properties-common python-software-properties
+
+#Lets calculate how much time is spent
+# We don't need apt-get dist-upgrade process to be counted. So, the timer starts here.
+START=$(date +%s) 
+echo $START >>Time.Vars
 
 # Let's install what's needed...
 if [ "$LINUX_DISTRO" == "Debian" ]; then
