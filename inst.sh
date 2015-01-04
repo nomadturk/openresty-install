@@ -27,6 +27,22 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
+readonly LINUX_DISTRO=$(lsb_release -i |awk '{print $3}')
+readonly DEBIAN_VERSION=$(lsb_release -sc)
+LINUX_ARCH=$(uname -m)
+
+# Check lsb_release
+if [ ! -x  /usr/bin/lsb_release ]; then
+	show_progress "Installing lsb-release."
+	apt-get -y --force-yes install lsb-release &>> /dev/null
+fi
+
+# Check Linux distro
+if [ "$LINUX_DISTRO" != "Ubuntu" ] && [ "$LINUX_DISTRO" != "Debian" ]; then
+	show_progress_error "Sorry, only Debian 7 and Ubuntu 14.04 is supported as of now"
+	exit 1
+fi
+
 ###################################################################
 
 show_progress "The script will terminate if any error to happen."
@@ -55,12 +71,24 @@ show_progress "Removing ffmpeg files if there any."
 apt-get -y --force-yes dist-upgrade
 apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm
 apt-get -y --force-yes install software-properties-common python-software-properties
-# Let's install what's needed...
 
-show_progress "Adding multimedia repository and doing an apt-get update."
-add-apt-repository 'deb http://www.deb-multimedia.org wheezy main non-free'
-apt-get update
-apt-get -y --force-yes install deb-multimedia-keyring
+# Let's install what's needed...
+if [ "$LINUX_DISTRO" == "Debian" ]; then
+	#Debian 
+	show_progress "Adding multimedia repository and doing an apt-get update."
+	add-apt-repository -y 'deb http://www.deb-multimedia.org wheezy main non-free'
+	apt-get update
+	apt-get -y --force-yes install deb-multimedia-keyring  libswresample0
+elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
+	#Ubuntu
+	apt-add-repository multiverse
+	add-apt-repository -y ppa:jon-severinsson/ffmpeg
+	apt-get update
+	apt-get -y --force-yes install libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev
+fi
+
+
+
 
 
 show_progress "Installing necessary packages apt-get update, please wait..."
@@ -80,9 +108,11 @@ apt-get -y --force-yes install graphicsmagick-libmagick-dev-compat libpam0g-dev 
 show_progress "Installing necessary packages apt-get update, please wait........................."
 apt-get -y --force-yes install libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxslt-dev openssl libgd2-xpm-dev
 show_progress "Installing necessary packages apt-get update, please wait............................"
-apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52 libswresample0 libgsm1-dev libbz2-dev
+apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52  libgsm1-dev libbz2-dev
 show_progress "Installing necessary packages apt-get update, please wait..............................."
-apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev
+apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev 
+
+
 
 
 show_progress "Start FFMpeg Installation"
@@ -91,28 +121,49 @@ show_progress "Depending on your CPU this might take a long while"
 
 mkdir -p ~/src-build/build-ffmpeg
 mkdir -p /root/ngx-build/
-#apt-get install yasm
+#apt-get -y --force-yes install yasm
 show_progress "		Installing yasm"
 ################################### First, install yasm
-cd ~/src-build/build-ffmpeg
-git clone git://github.com/yasm/yasm.git
-cd yasm
-./autogen.sh
-./configure
-make
-checkinstall --pkgname=yasm --pkgversion="1.3.0" --backup=no \
-  --deldoc=yes --fstrans=no --default
+# YASM refused to install on ppc64le system. At least it broke the script. So let me try fixing it.
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
+	show_progress_error "Downloading YASM from the repository since we dont know your system architecture"
+else
+    cd ~/src-build/build-ffmpeg
+	git clone git://github.com/yasm/yasm.git
+	cd yasm
+	./autogen.sh x86_64 i386 amd64
+	# ./configure x86_64 i386 amd64
+	make
+	checkinstall --pkgname=yasm --pkgversion="1.3.0" --backup=no \
+	--deldoc=yes --fstrans=no --default
+fi
+
   
 show_progress "		Installing libx246"
 ################################### libx264
 cd ~/src-build/build-ffmpeg
-git clone --depth 1 git://git.videolan.org/x264
-cd x264
-./configure --enable-static
-make
-checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
-  awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
-  --fstrans=no --default
+# They have git but I had connectivity errors with them so..
+# git clone --depth 1 git://git.videolan.org/x264
+#cd x264
+
+
+# Check Linux distro
+# On RunAbove Power8 systems due to system bein ppc64le the script didn't work. So, here's my workaround.
+# if [[ $LINUX_ARCH == "x86_64" ]] && [[ $LINUX_ARCH == "i386" ]] && [[ $LINUX_ARCH == "i486" ]] && [[ $LINUX_ARCH == "amd64" ]] && [[ $LINUX_ARCH == "x86" ]] && [[ $LINUX_ARCH == "powerpc" ]] && [[ $LINUX_ARCH == "powerpc64" ]] && [[ $LINUX_ARCH == "sparc" ]] && [[ $LINUX_ARCH == "aarch64" ]] && [[ $LINUX_ARCH == "s390" ]] && [[ $LINUX_ARCH == "hppa*" ]] && [[ $LINUX_ARCH == "alpha*" ]]; then
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ] && [ "$LINUX_ARCH" != "powerpc" ] && [ "$LINUX_ARCH" != "powerpc64" ] && [ "$LINUX_ARCH" != "sparc" ] && [ "$LINUX_ARCH" != "aarch64" ] && [ "$LINUX_ARCH" != "s390" ] && [ "$LINUX_ARCH" != "hppa*" ] && [ "$LINUX_ARCH" != "alpha*" ]; then
+	show_progress_error "Sorry, architecture is not supported. Let's see if the repos has this"
+	apt-get -y --force-yes install libx264-dev
+else
+	wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
+	tar xjvf last_x264.tar.bz2
+	cd x264-snapshot*
+	./configure --enable-static
+	make
+	checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
+		awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
+		--fstrans=no --default
+fi
+
 show_progress "	Installing fdk-aac"
 ################################### fdk-aac
 cd ~/src-build/build-ffmpeg
@@ -160,14 +211,20 @@ checkinstall --pkgname=libopus --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=n
 
 show_progress "		Installing librtmp"
 #################################### librtmp
-cd ~/src-build/build-ffmpeg
-git clone git://git.ffmpeg.org/rtmpdump
-cd rtmpdump
-make SYS=posix
-checkinstall --pkgname=rtmpdump --pkgversion="2:$(date +%Y%m%d%H%M)-git" --backup=no \
+# Let's install what's needed...
+if [ "$LINUX_ARCH" == "ppc64le" ]; then
+	#Ubuntu
+	show_progress_error "Warning! This will affect the total time since instead of compiling, I will be using the librtmp-dev from the repos"
+else
+	#Debian 
+	cd ~/src-build/build-ffmpeg
+	git clone git://git.ffmpeg.org/rtmpdump
+	cd rtmpdump
+	make SYS=posix
+	checkinstall --pkgname=rtmpdump --pkgversion="2:$(date +%Y%m%d%H%M)-git" --backup=no \
     --deldoc=yes --fstrans=no --default
-
-export LD_LIBRARY_PATH=/usr/local/lib/
+	export LD_LIBRARY_PATH=/usr/local/lib/
+fi
 
 show_progress "Now... Using all above, compiling FFMpeg"
 ################################### Finally, ffmpeg
@@ -300,7 +357,7 @@ wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.2-beta.zi
 unzip release-1.9.32.2-beta.zip
 cd ngx_pagespeed-release-1.9.32.2-beta/
 show_progress "		Installing psol for ngx_pagespeed"
-wget https://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz
+wget --no-check-certificate https://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz
 tar -xzvf 1.9.32.2.tar.gz   # extracts to psol/
 
 
@@ -337,13 +394,76 @@ git clone https://github.com/aperezdc/ngx-fancyindex.git
 
 
 
-
-
-
-
 show_progress "Last... Getting, compiling nginx, doing some tweaks etc. Be patient, will you!"
 mkdir ~/nginx-package/
 cd ~/nginx-package/
+
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ] && [ "$LINUX_ARCH" != "powerpc" ] && [ "$LINUX_ARCH" != "powerpc64" ] && [ "$LINUX_ARCH" != "sparc" ] && [ "$LINUX_ARCH" != "aarch64" ] && [ "$LINUX_ARCH" != "s390" ] && [ "$LINUX_ARCH" != "hppa*" ] && [ "$LINUX_ARCH" != "alpha*" ]; then
+	#Ubuntu
+	show_progress_error "Warning, Openresty can not be compiled with pcre-jit module on PowerPC, replacing it with Nginx!"
+	show_progress_error "Also ngx_pagespeed won't compile on ppc architecture either. So skipping it..."
+wget http://nginx.org/download/nginx-1.7.9.tar.gz
+tar -xvzf nginx-1.7.9.tar.gz
+cd nginx-1.7.9
+
+./configure \
+--prefix=/usr/local/nginx/  \
+--sbin-path=/usr/sbin/nginx \
+--conf-path=/etc/nginx/nginx.conf \
+--pid-path=/var/run/nginx.pid \
+--lock-path=/var/lock/nginx.lock \
+--error-log-path=/var/log/nginx/error.log \
+--http-log-path=/var/log/nginx/access.log \
+--http-client-body-temp-path=/var/cache/nginx/client \
+--http-proxy-temp-path=/var/cache/nginx/proxy \
+--http-fastcgi-temp-path=/var/cache/nginx/fastcgi \
+--http-uwsgi-temp-path=/var/cache/nginx/uwsgi \
+--http-scgi-temp-path=/var/cache/nginx/scgi \
+--add-module=/root/ngx-build/naxsi/naxsi_src \
+--with-http_dav_module \
+--with-http_flv_module \
+--with-http_mp4_module \
+--with-http_gzip_static_module \
+--with-http_image_filter_module \
+--with-http_realip_module \
+--with-http_ssl_module \
+--with-http_sub_module \
+--with-http_xslt_module \
+--with-ipv6 \
+--with-debug  \
+--with-sha1=/usr/include/openssl \
+--with-md5=/usr/include/openssl \
+--user=www-data \
+--group=www-data \
+--with-http_stub_status_module \
+--without-mail_pop3_module \
+--without-mail_imap_module \
+--without-mail_smtp_module \
+--with-http_stub_status_module \
+--with-http_secure_link_module \
+--with-http_sub_module \
+--with-http_addition_module \
+--with-http_geoip_module  \
+--with-http_perl_module \
+--with-http_random_index_module \
+--with-http_stub_status_module \
+--with-google_perftools_module \
+--with-http_gunzip_module \
+--with-http_spdy_module \
+--with-file-aio \
+--with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
+--with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
+--with-openssl=/root/ngx-build/openssl \
+--add-module=/root/ngx-build/nginx-upload-progress-module \
+--add-module=/root/ngx-build/nginx_http_push_module \
+--add-module=/root/ngx-build/ngx-fancyindex \
+--add-module=/root/ngx-build/nginx-dav-ext-module \
+--add-module=/root/ngx-build/ngx_cache_purge \
+--add-module=/root/ngx-build/nginx-dlna-module \
+--add-module=/root/ngx-build/nginx-rtmp-module \
+--add-module=/root/ngx-build/websockify-nginx-module \
+--add-module=/root/ngx-build/nginx-upstream-fair 
+else
 wget http://openresty.org/download/ngx_openresty-1.7.7.1.tar.gz
 tar -xvzf ngx_openresty-1.7.7.1.tar.gz
 cd ngx_openresty-1.7.7.1
@@ -406,6 +526,8 @@ cd ngx_openresty-1.7.7.1
 --add-module=/root/ngx-build/nginx-rtmp-module \
 --add-module=/root/ngx-build/websockify-nginx-module \
 --add-module=/root/ngx-build/nginx-upstream-fair 
+fi
+
 make
 #make install
 
@@ -465,7 +587,18 @@ echo Up till now it took $(($DIFFX / 60 )) minutes and $(($DIFFX % 60 )) seconds
 show_progress_info "$(cat Time1.Output)"
 apt-get -y --force-yes install python-software-properties
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/debian wheezy main'
+
+# Let's install what's needed...
+if [ "$LINUX_DISTRO" == "Debian" ]; then
+	#Debian 
+	show_progress "Adding MariaDB Wheezy Repository"
+	add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/debian wheezy main'
+elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
+	#Ubuntu
+	show_progress "Adding MariaDB Trusty Repository"
+	add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
+fi
+
 apt-get update
 # End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
 END=$(date +%s)
@@ -475,12 +608,19 @@ apt-get -y --force-yes install mariadb-server
 # Start timer again.
 START2=$(date +%s)
 echo $START2 >>Time.Vars
-show_progress "Since I feel lazy, we'll get the Php5.5 from DotDeb..."
-## DotDeb Php 5.5, 
-add-apt-repository 'deb http://packages.dotdeb.org wheezy all'
-add-apt-repository 'deb http://packages.dotdeb.org wheezy-php55 all'
-wget http://www.dotdeb.org/dotdeb.gpg
-apt-key add dotdeb.gpg
+
+
+## DotDeb Php 5.5 repository for Debian
+if [ "$LINUX_DISTRO" == "Debian" ]; then
+	#Debian 
+	show_progress "Adding DotDeb Php 5.5 Repository"
+	add-apt-repository 'deb http://packages.dotdeb.org wheezy all'
+	add-apt-repository 'deb http://packages.dotdeb.org wheezy-php55 all'
+	wget http://www.dotdeb.org/dotdeb.gpg
+	apt-key add dotdeb.gpg
+fi
+ 
+
 apt-get update
 apt-get -y --force-yes install php5-fpm php5-mysql php5-xcache memcached php5-memcache php5-memcached
 apt-get -y --force-yes install php5-mcrypt php5-cli php5-curl php5-gd php5-json php5-sqlite php5-pspell php5-readline php5-recode php5-xmlrpc php5-xsl php5-intl php5-imagick php5-tidy
