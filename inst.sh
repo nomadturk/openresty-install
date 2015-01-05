@@ -76,10 +76,16 @@ fi
 ##								 ##
 ##								 ##
 ###################################################################
+#     A bit of cleanup first, just in case there're old stuff	 #
+rm -r ~/ngx-build ~/src-build ~/nginx-package ~/Time* ~/Install.log
+###################################################################
+
+
 show_progress "The script will terminate if any error to happen."
 set -e
 
 # Some systems problems with locales. So lets try to add them just to run smoother.
+show_progress "Setting system locales. If they are erroneous MariaDB install just might fail"
 dpkg-reconfigure locales
 LANGUAGE=en_US.UTF-8
 LANG=en_US.UTF-8
@@ -117,15 +123,12 @@ if [ "$LINUX_DISTRO" == "Debian" ]; then
 	apt-get -y --force-yes install deb-multimedia-keyring  libswresample0
 elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
 	#Ubuntu
+	show_progress "Adding Ubuntu repository for FFMpeg and installing Ubuntu only stuff"
 	apt-add-repository multiverse
 	add-apt-repository -y ppa:jon-severinsson/ffmpeg
 	apt-get update
 	apt-get -y --force-yes install libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev
 fi
-
-
-
-
 
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..."
 apt-get -y --force-yes install build-essential checkinstall git libfaac-dev libjack-jackd2-dev >> /dev/null
@@ -149,14 +152,11 @@ show_progress_info "Installing necessary packages apt-get update, please wait $(
 apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev  >> /dev/null
 
 
-
-
 show_progress "Start FFMpeg Installation"
 show_progress "Depending on your CPU this might take a long while"
 ##################################################################Start FFMPEG 
-
 mkdir -p ~/src-build/build-ffmpeg
-mkdir -p /root/ngx-build/
+mkdir -p ~/ngx-build/
 #apt-get -y --force-yes install yasm
 show_progress "		Installing yasm"
 ################################### First, install yasm
@@ -337,9 +337,15 @@ make
 make install
 cp -r /usr/local/gperftools/lib/* /usr/local/lib/
 
-mkdir /tmp/tcmalloc
-chmod 0777 /tmp/tcmalloc/
-chown -R www-data:www-data /tmp/tcmalloc
+
+if [ ! -d /tmp/tcmalloc ]; then
+	mkdir /tmp/tcmalloc
+	chmod 0777 /tmp/tcmalloc/
+	chown -R www-data:www-data /tmp/tcmalloc
+else
+	chmod 0777 /tmp/tcmalloc/
+	chown -R www-data:www-data /tmp/tcmalloc
+fi
 
 show_progress "		Installing apt-get additions for gperftools"
 apt-get -y --force-yes install google-perftools libgoogle-perftools-dev
@@ -572,21 +578,17 @@ fi
 make
 #make install
 
-#mkdir /root/nginx-package/ngx_openresty-1.7.7.1/build/nginx- 1.7.7/conf/
-mkdir -p /var/cache/nginx/{client,scgi,uwsgi,fastcgi,proxy}
-mkdir -p /etc/nginx/{sites-available,sites-enabled}
-mkdir -p /var/{ngx_pagespeed_cache,log/nginx,log,pagespeed}
-mkdir -p /usr/local/nginx/nginx/logs
-mkdir -p /var/ngx_pagespeed_cache
-mkdir -p /var/log/pagespeed
-chown -R www-data:www-data /var/cache/nginx
-chown -R www-data:www-data /var/ngx_pagespeed_cache
-chown -R www-data:www-data /var/log/nginx
-chown -R www-data:www-data /var/log/pagespeed
-chown -R www-data:www-data /usr/local/nginx/nginx/logs
-chown -R www-data:www-data /etc/nginx/sites-available
-chown -R www-data:www-data /etc/nginx/sites-enabled
-chown -R www-data:www-data /var/ngx_pagespeed_cache
+# mkdir -p /var/cache/nginx/{client,scgi,uwsgi,fastcgi,proxy}
+# Create and change ownership some folders
+for dir in /var/cache/nginx/  /var/cache/nginx/client /var/cache/nginx/scgi /var/cache/nginx/uwsgi /var/cache/nginx/fastcgi /var/cache/nginx/proxy /var/ngx_pagespeed_cache /var/log/nginx /var/log/pagespeed /usr/local/nginx/nginx/logs /var/ngx_pagespeed_cache /var/log/pagespeed /etc/nginx/sites-available sites-enabled
+do
+if [ ! -d $dir ]; then
+	mkdir -p $dir
+	chown -R  www-data:www-data $dir
+else
+	chown -R  www-data:www-data $dir
+fi
+done
 
 # Now let's build nginx deb file. 
 # Warning, it's not set to auto-install as of now.
