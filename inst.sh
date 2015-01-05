@@ -1,4 +1,22 @@
 #!/bin/bash
+# you have write permissions there. set RETAIN_NUM_LINES to the
+
+### Setup Logging
+LOGFILE=Install.log
+RETAIN_NUM_LINES=10
+
+function logsetup {
+    TMP=$(tail -n $RETAIN_NUM_LINES $LOGFILE 2>/dev/null) && echo "${TMP}" > $LOGFILE
+    exec > >(tee -a $LOGFILE)
+    exec 2>&1
+}
+
+function log {
+    echo "[$(date)]: $*"
+}
+logsetup
+### Logging started
+
 # Yellow
 function show_progress ()
 {
@@ -26,7 +44,6 @@ function show_progress_error2 ()
 function show_progress_loader ()
 {
 	echo $(tput setb 4)$(tput setaf 1)$@$(tput sgr0)
-
 }
 
 # Checking permissions
@@ -52,7 +69,13 @@ if [ "$LINUX_DISTRO" != "Ubuntu" ] && [ "$LINUX_DISTRO" != "Debian" ]; then
 fi
 
 ###################################################################
-
+##								 ##
+##								 ##
+##	Down below, it's a mess... 				 ##
+##	Now it'll try to do it's best.				 ##
+##								 ##
+##								 ##
+###################################################################
 show_progress "The script will terminate if any error to happen."
 set -e
 
@@ -75,15 +98,15 @@ update-locale en_US.UTF-8
 . /etc/default/locale
 
 # Remove any existing packages:
-show_progress "Removing ffmpeg files if there any."
-apt-get -y --force-yes dist-upgrade
-apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm
-apt-get -y --force-yes install software-properties-common python-software-properties
+show_progress "Doing a system upgrade and removing ffmpeg files if there any."
+apt-get -y --force-yes dist-upgrade >> /dev/null
+apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm >> /dev/null
+apt-get -y --force-yes install software-properties-common python-software-properties >> /dev/null
 
 #Lets calculate how much time is spent
 # We don't need apt-get dist-upgrade process to be counted. So, the timer starts here.
 START=$(date +%s) 
-echo $START >>Time.Vars
+echo $START >> Time.Vars
 
 # Let's install what's needed...
 if [ "$LINUX_DISTRO" == "Debian" ]; then
@@ -104,26 +127,26 @@ fi
 
 
 
-show_progress_loader "Installing necessary packages apt-get update, please wait..."
-apt-get -y --force-yes install build-essential checkinstall git libfaac-dev libjack-jackd2-dev
-show_progress_loader "Installing necessary packages apt-get update, please wait......."
-apt-get -y --force-yes install libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev
-show_progress_loader "Installing necessary packages apt-get update, please wait.........."
-apt-get -y --force-yes install libvorbis-dev texi2html zlib1g-dev autoconf automake g++ bzip2 libfreetype6-dev libgpac-dev libtool pkg-config
-show_progress_loader "Installing necessary packages apt-get update, please wait............."
-apt-get -y --force-yes install libssl1.0.0 libssl-dev libxvidcore-dev libxvidcore4 libass-dev librtmp-dev
-show_progress_loader "Installing necessary packages apt-get update, please wait................"
-apt-get -y --force-yes install libpcre3 libpcre3-dev unzip tar zip libpcrecpp0
-show_progress_loader "Installing necessary packages apt-get update, please wait..................."
-apt-get -y --force-yes install libreadline-dev libncurses5-dev perl make libjpeg-dev libjpeg-progs devscripts graphicsmagick-imagemagick-compat
-show_progress_loader "Installing necessary packages apt-get update, please wait......................"
-apt-get -y --force-yes install graphicsmagick-libmagick-dev-compat libpam0g-dev libpng-dev libpng12-0 libpng12-dev libxml2-dev
-show_progress_loader "Installing necessary packages apt-get update, please wait........................."
-apt-get -y --force-yes install libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxslt-dev openssl libgd2-xpm-dev
-show_progress_loader "Installing necessary packages apt-get update, please wait............................"
-apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52  libgsm1-dev libbz2-dev
-show_progress_loader "Installing necessary packages apt-get update, please wait..............................."
-apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev 
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..."
+apt-get -y --force-yes install build-essential checkinstall git libfaac-dev libjack-jackd2-dev >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)......."
+apt-get -y --force-yes install libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1).........."
+apt-get -y --force-yes install libvorbis-dev texi2html zlib1g-dev autoconf automake g++ bzip2 libfreetype6-dev libgpac-dev libtool pkg-config >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)............."
+apt-get -y --force-yes install libssl1.0.0 libssl-dev libxvidcore-dev libxvidcore4 libass-dev librtmp-dev >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)................"
+apt-get -y --force-yes install libpcre3 libpcre3-dev unzip tar zip libpcrecpp0 >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..................."
+apt-get -y --force-yes install libreadline-dev libncurses5-dev perl make libjpeg-dev libjpeg-progs devscripts graphicsmagick-imagemagick-compat >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)......................"
+apt-get -y --force-yes install graphicsmagick-libmagick-dev-compat libpam0g-dev libpng-dev libpng12-0 libpng12-dev libxml2-dev >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)........................."
+apt-get -y --force-yes install libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxslt-dev openssl libgd2-xpm-dev >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)............................"
+apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52  libgsm1-dev libbz2-dev >> /dev/null
+show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..............................."
+apt-get -y --force-yes install libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev  >> /dev/null
 
 
 
@@ -374,6 +397,10 @@ show_progress "		Installing psol for ngx_pagespeed"
 wget http://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz
 tar -xzvf 1.9.32.2.tar.gz   # extracts to psol/
 
+# Timer reminder
+DIFFX=$(( $(date +%s) - $START )) 
+echo Up till now it took $(($DIFFX / 60 )) minutes and $(($DIFFX % 60 )) seconds... > time.tmp
+show_progress_error2 "$(cat time.tmp)"
 
 ######################################### Necessary modules from GitHub
 show_progress "Git cloning modules"
@@ -596,15 +623,12 @@ rm -r ~/nginx-conf
 show_progress "Uh oh... We forgot installing mysql. So... MariaDB it is!"
 cd ~/
 ## MariaDB
-DIFFX=$(( $END - $START )) 
-echo Up till now it took $(($DIFFX / 60 )) minutes and $(($DIFFX % 60 )) seconds... >>Time1.Output
-show_progress_info "$(cat Time1.Output)"
-
-
-
 if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
 	show_progress_error "Can install MariaDB to this system using external repos. Let's try if your own repos have anything to offer"
 	apt-get -y --force-yes mariadb-server
+	# End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
+	END=$(date +%s)
+	echo $END >> Time.Vars
 else
 	apt-get -y --force-yes install python-software-properties
 	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
@@ -620,17 +644,15 @@ else
 		add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
 		apt-get update
 	fi
+	# End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
+	END=$(date +%s)
+	echo $END >> Time.Vars
 	apt-get -y --force-yes install mariadb-server 
 fi
-
-# End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
-END=$(date +%s)
-echo $END >>Time.Vars
-
 # mariadb-client mariadb-common
 # Start timer again.
 START2=$(date +%s)
-echo $START2 >>Time.Vars
+echo $START2 >> Time.Vars
 
 
 ## DotDeb Php 5.5 repository for Debian
@@ -694,7 +716,7 @@ logrotate -f -v /etc/logrotate.d/nginx
 show_progress "Done and done... Enjoy it. All is ready to go."
 
 END2=$(date +%s)
-echo $END2 >>Time.Vars
+echo $END2>> Time.Vars
 DIFF1=$(( END - START ))
 DIFF2=$(( END2 - START2 ))
 DIFF=$(( DIFF1 + DIFF2 ))
@@ -704,10 +726,4 @@ show_progress_info "This is of course excluding the time spent at MariaDB Passwo
 #echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.Output
 read -s -n 1 any_key | show_progress_info "Press a key to exit now..." && wait
 
-
-
-# More info about RTMP
-#https://github.com/arut/nginx-rtmp-module
-#https://github.com/tg123/websockify-nginx-module
-#https://github.com/masterzen/nginx-upload-progress-module
-#http://pkula.blogspot.com.tr/2013/06/live-video-stream-from-raspberry-pi.html
+exit
