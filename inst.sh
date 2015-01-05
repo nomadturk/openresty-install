@@ -625,7 +625,7 @@ cd ~/
 ## MariaDB
 if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
 	show_progress_error "Can install MariaDB to this system using external repos. Let's try if your own repos have anything to offer"
-	apt-get -y --force-yes mariadb-server
+	apt-get -y --force-yes install mariadb-server
 	# End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
 	END=$(date +%s)
 	echo $END >> Time.Vars
