@@ -673,20 +673,33 @@ apt-get -y --force-yes install php5-fpm php5-mysql php5-xcache memcached php5-me
 apt-get -y --force-yes install php5-mcrypt php5-cli php5-curl php5-gd php5-json php5-sqlite php5-pspell php5-readline php5-recode php5-xmlrpc php5-xsl php5-intl php5-imagick php5-tidy
 
 show_progress "Time for a bit of tweaks"
-sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
-sed -i "s/^;listen.owner = www-data/listen.owner = www-data/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.backlog = 128/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.backlog = 65535/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^listen=.*$/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf 
-sed -i "s/^listen =.*$/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf 
-sed -i "s/^  access_log logs\/static.log/  access_log \/var\/log\/nginx\/static.log/" /etc/nginx/h5bp/location/expires.conf
+if [ -f /etc/php5/fpm/php.ini ]; then
+	sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
+fi
+if [ -f /etc/php5/fpm/pool.d/www.conf ]; then
+	sed -i "s/^;listen.owner = www-data/listen.owner = www-data/" /etc/php5/fpm/pool.d/www.conf
+	sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool.d/www.conf
+	sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
+	sed -i "s/^;listen.backlog = 128/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
+	sed -i "s/^;listen.backlog = 65535/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
+	sed -i "s/^listen=.*$/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf 
+	sed -i "s/^listen =.*$/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf 
+fi
+if [ -f /etc/nginx/h5bp/location/expires.conf ]; then
+	sed -i "s/^  access_log logs\/static.log/  access_log \/var\/log\/nginx\/static.log/" /etc/nginx/h5bp/location/expires.conf
+fi
 
 
-mkdir -p /var/www
-cp /usr/local/nginx/nginx/html/*.html /var/www/
-chown -R www-data:www-data /var/www/
+if [ ! -d /var/www ]; then
+        mkdir -p /var/www
+        if [ -d /usr/local/nginx/nginx/html/ ]; then
+                show_progress "Creating /var/www"
+                cp /usr/local/nginx/nginx/html/* /var/www/
+        elif [ -d /usr/local/nginx/html ]; then
+                show_progress "Creating /var/www"
+                cp /usr/local/nginx/html/* /var/www/
+        fi
+fi
 
 
  
@@ -706,10 +719,12 @@ echo "        notifempty" >> nginx.logrotate
 echo "        create 640 www-data adm" >> nginx.logrotate
 echo "        sharedscripts" >> nginx.logrotate
 echo "        postrotate" >> nginx.logrotate
-echo "                [ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`" >> nginx.logrotate
+echo "        [ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`" >> nginx.logrotate
 echo "        endscript" >> nginx.logrotate
-echo "}" >> nginx.logrotate
-
+echo "}" > nginx.logrotate
+if [ -f /etc/logrotate.d/nginx ]; then
+        rm /etc/logrotate.d/nginx
+fi
 mv nginx.logrotate /etc/logrotate.d/nginx
 chmod 0644 /etc/logrotate.d/nginx
 logrotate -f -v /etc/logrotate.d/nginx
