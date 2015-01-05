@@ -677,8 +677,8 @@ sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool
 sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
 sed -i "s/^;listen.backlog = 128/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
 sed -i "s/^;listen.backlog = 65535/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^listen=.*$/listen = 127.0.0.1:9001/" /etc/php5/fpm/pool.d/www.conf 
-sed -i "s/^listen =.*$/listen = 127.0.0.1:9001/" /etc/php5/fpm/pool.d/www.conf 
+sed -i "s/^listen=.*$/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf 
+sed -i "s/^listen =.*$/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf 
 sed -i "s/^  access_log logs\/static.log/  access_log \/var\/log\/nginx\/static.log/" /etc/nginx/h5bp/location/expires.conf
 
 
