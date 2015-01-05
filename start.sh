@@ -30,9 +30,9 @@ chmod +x inst.sh
 #killall screen
     screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill
 screen -d -m -S InstallScreen bash -c "bash inst.sh"
-screen -RR
-echo "Now...  If you see this, it means I couldn automatically get back to screen."
-echo "Just use one of the below"
-echo "screen -RR" 
-echo "screen -R"
-echo "screen -r InstallScreen"
+screen -r InstallScreen
+echo "Now...  If you see this, it means I couldn't automatically get back to screen."
+echo "Just use one of the below commands:"
+echo "     screen -RR" 
+echo "     screen -R"
+echo "     screen -r InstallScreen"
