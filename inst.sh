@@ -750,4 +750,5 @@ chmod +x VirtMin.sh
 bash -c "bash VirtMin.sh"
 /etc/init.d/apache2 stop
 update-rc.d apache2 remove
+ apt-get install webmin-virtualmin-nginx webmin-virtualmin-nginx-ssl
 
