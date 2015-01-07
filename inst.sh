@@ -593,7 +593,7 @@ done
 # Now let's build nginx deb file. 
 # Warning, it's not set to auto-install as of now.
 show_progress "Installing Nginx"
-checkinstall 	--fstrans=no --install=yes -y 
+checkinstall 	--fstrans=no --pkgname=nginx --install=yes -y
 
 show_progress "Creating Nginx startup script"
 ######################################### Add nginx to /etc/init.d for
