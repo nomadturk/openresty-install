@@ -684,6 +684,8 @@ if [ -f /etc/php5/fpm/pool.d/www.conf ]; then
 	sed -i "s/^;listen.backlog = 65535/listen.backlog = 65536/" /etc/php5/fpm/pool.d/www.conf
 	sed -i "s/^listen=.*$/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf 
 	sed -i "s/^listen =.*$/listen = 127.0.0.1:9000/" /etc/php5/fpm/pool.d/www.conf 
+	/etc/init.d/php5-fpm stop
+	/etc/init.d/php5-fpm start
 fi
 if [ -f /etc/nginx/h5bp/location/expires.conf ]; then
 	sed -i "s/^  access_log logs\/static.log/  access_log \/var\/log\/nginx\/static.log/" /etc/nginx/h5bp/location/expires.conf
@@ -750,5 +752,5 @@ chmod +x VirtMin.sh
 bash -c "bash VirtMin.sh"
 /etc/init.d/apache2 stop
 update-rc.d apache2 remove
- apt-get install webmin-virtualmin-nginx webmin-virtualmin-nginx-ssl
+apt-get -y --force-yes install webmin-virtualmin-nginx webmin-virtualmin-nginx-ssl
 
