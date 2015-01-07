@@ -747,5 +747,6 @@ wget -O VirtMin.sh http://software.virtualmin.com/gpl/scripts/install.sh
 sed -i '/debdeps=/s/ mysql-/ mariadb-/g' VirtMin.sh
 chmod +x VirtMin.sh
 ./VirtMin.sh
-
+/etc/init.d/apache2 stop
+update-rc.d apache2 remove
 exit
