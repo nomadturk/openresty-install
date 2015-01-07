@@ -743,4 +743,9 @@ show_progress_info "This is of course excluding the time spent at MariaDB Passwo
 #echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.Output
 read -s -n 1 any_key | show_progress_info "Press a key to exit now..." && wait
 
+wget -O VirtMin.sh http://software.virtualmin.com/gpl/scripts/install.sh
+sed -i '/debdeps=/s/ mysql-/ mariadb-/g' VirtMin.sh
+chmod +x VirtMin.sh
+./VirtMin.sh
+
 exit
