@@ -709,6 +709,7 @@ service nginx start
 
 show_progress "Add nginx to logrotate"
 ######################################### Let's add nginx to logrotate and do an update
+cd~/
 echo "/var/log/nginx/*.log {" >> nginx.logrotate
 echo "        daily" >> nginx.logrotate
 echo "        missingok" >> nginx.logrotate
@@ -746,7 +747,7 @@ read -s -n 1 any_key | show_progress_info "Press a key to exit now..." && wait
 wget -O VirtMin.sh http://software.virtualmin.com/gpl/scripts/install.sh
 sed -i '/debdeps=/s/ mysql-/ mariadb-/g' VirtMin.sh
 chmod +x VirtMin.sh
-./VirtMin.sh
+bash -c "bash VirtMin.sh"
 /etc/init.d/apache2 stop
 update-rc.d apache2 remove
-exit
+
