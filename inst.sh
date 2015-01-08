@@ -110,7 +110,7 @@ apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yas
 apt-get -y --force-yes install software-properties-common python-software-properties >> /dev/null
 
 #Lets calculate how much time is spent
-# We don't need apt-get dist-upgrade process to be counted. So, the timer starts here.
+# We don't need this apt-get dist-upgrade process to be counted. So, the timer starts here.
 START=$(date +%s) 
 echo $START >> Time.Vars
 
@@ -753,4 +753,7 @@ bash -c "bash VirtMin.sh"
 /etc/init.d/apache2 stop
 update-rc.d apache2 remove
 apt-get -y --force-yes install webmin-virtualmin-nginx webmin-virtualmin-nginx-ssl
+apt-mark hold ffmpeg
+apt-mark hold nginx
+apt-mark hold mysql-common
 
