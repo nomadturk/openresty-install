@@ -83,6 +83,7 @@ rm -r ~/ngx-build ~/src-build ~/nginx-package ~/Time* ~/Install.log
 
 show_progress "The script will terminate if any error to happen."
 set -e
+mkdir -p ~/ngx-build/
 
 # Some systems problems with locales. So lets try to add them just to run smoother.
 show_progress "Setting system locales. If they are erroneous MariaDB install just might fail"
