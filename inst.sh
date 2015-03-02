@@ -619,7 +619,7 @@ git clone https://github.com/h5bp/server-configs-nginx.git
 cd server-configs-nginx
 mv -f h5bp mime.types doc/ /etc/nginx
 cd ~/
-rm -r ~/nginx-conf
+rm -r -f ~/nginx-conf
 
 
 show_progress "Uh oh... We forgot installing mysql. So... MariaDB it is!"
