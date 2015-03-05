@@ -1,0 +1,7 @@
+for list in build-essential checkinstall git libfaac-dev libjack-jackd2-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev libvorbis-dev texi2html zlib1g-dev autoconf automake g++ bzip2 libfreetype6-dev libgpac-dev libtool pkg-config libssl1.0.0 libssl-dev libxvidcore-dev libxvidcore4 libass-dev librtmp-dev libpcre3 libpcre3-dev unzip tar zip libpcrecpp0 ibreadline-dev libncurses5-dev perl make libjpeg-dev libjpeg-progs devscripts graphicsmagick-imagemagick-compat graphicsmagick-libmagick-dev-compat libpam0g-dev libpng-dev libpng12-0 libpng12-dev libxml2-dev libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxslt-dev openssl libgd2-xpm-dev libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52  libgsm1-dev libbz2-dev libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev 
+do
+dpkg --list $list &>/dev/null  && continue  || { echo "$list" >>install.list;}
+done
+
+
+
