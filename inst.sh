@@ -511,9 +511,9 @@ cd nginx-1.7.9
 --add-module=/root/ngx-build/websockify-nginx-module \
 --add-module=/root/ngx-build/nginx-upstream-fair 
 else
-wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz
-tar -xvzf ngx_openresty-1.7.10.1.tar.gz
-cd ngx_openresty-1.7.10.1
+wget http://openresty.org/download/ngx_openresty-1.7.7.2.tar.gz
+tar -xvzf ngx_openresty-1.7.7.2.tar.gz
+cd ngx_openresty-1.7.7.2
 ./configure \
 --prefix=/usr/local/nginx/  \
 --sbin-path=/usr/sbin/nginx \
