@@ -113,7 +113,7 @@ apt-get -y --force-yes install software-properties-common python-software-proper
 #Lets calculate how much time is spent
 # We don't need this apt-get dist-upgrade process to be counted. So, the timer starts here.
 START=$(date +%s) 
-echo $START >> Time.Vars
+echo $START > ~/Time.Varsars
 
 # Let's install what's needed...
 if [ "$LINUX_DISTRO" == "Debian" ]; then
@@ -476,7 +476,7 @@ if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARC
 	apt-get -y --force-yes install mariadb-server
 	# End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
 	END=$(date +%s)
-	echo $END >> Time.Vars
+	echo $END >> ~/Time.Varsars
 else
 	apt-get -y --force-yes install python-software-properties
 	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
@@ -494,13 +494,13 @@ else
 	fi
 	# End timer, we do not want mysql password screen to mess up with our resulting time now, do we?
 	END=$(date +%s)
-	echo $END >> Time.Vars
+	echo $END >> ~/Time.Varsars
 	apt-get -y --force-yes install mariadb-server 
 fi
 # mariadb-client mariadb-common
 # Start timer again.
 START2=$(date +%s)
-echo $START2 >> Time.Vars
+echo $START2 >> ~/Time.Varsars
 
 
 ## DotDeb Php 5.5 repository for Debian
@@ -582,7 +582,7 @@ logrotate -f -v /etc/logrotate.d/nginx
 show_progress "Done and done... Enjoy it. All is ready to go."
 
 END2=$(date +%s)
-echo $END2>> Time.Vars
+echo $END2>> ~/Time.Varsars
 DIFF1=$(( END - START ))
 DIFF2=$(( END2 - START2 ))
 DIFF=$(( DIFF1 + DIFF2 ))
