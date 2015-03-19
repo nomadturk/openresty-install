@@ -248,13 +248,13 @@ git clone https://github.com/openssl/openssl.git
 show_progress "		Installing ngx_pagespeed"
 ######################################### ngx_pagespeed
 cd /root/ngx-build/
-wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.2-beta.zip
-unzip release-1.9.32.2-beta.zip
-cd ngx_pagespeed-release-1.9.32.2-beta/
+wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.3-beta.zip
+unzip release-1.9.32.3-beta.zip
+cd ngx_pagespeed-release-1.9.32.3-beta/
 show_progress "		Installing psol for ngx_pagespeed"
 # Can change it with the https one. But it is slower.
-wget http://dl.google.com/dl/page-speed/psol/1.9.32.2.tar.gz
-tar -xzvf 1.9.32.2.tar.gz   # extracts to psol/
+wget http://dl.google.com/dl/page-speed/psol/1.9.32.3.tar.gz
+tar -xzvf 1.9.32.3.tar.gz   # extracts to psol/
 
 # Timer reminder
 DIFFX=$(( $(date +%s) - $START )) 
@@ -302,9 +302,9 @@ if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARC
 	#Ubuntu
 	show_progress_error "Warning, Openresty can not be compiled with pcre-jit module on PowerPC, replacing it with Nginx!"
 	show_progress_error "Also ngx_pagespeed won't compile on ppc architecture either. So skipping it..."
-wget http://nginx.org/download/nginx-1.7.9.tar.gz
-tar -xvzf nginx-1.7.9.tar.gz
-cd nginx-1.7.9
+wget http://nginx.org/download/nginx-1.7.10.tar.gz
+tar -xvzf nginx-1.7.10.tar.gz
+cd nginx-1.7.10
 
 ./configure \
 --prefix=/usr/local/nginx/  \
@@ -415,7 +415,7 @@ cd ngx_openresty-1.7.10.1
 --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
 --with-openssl=/root/ngx-build/openssl \
 --add-module=/root/ngx-build/nginx-upload-progress-module \
---add-module=/root/ngx-build/ngx_pagespeed-release-1.9.32.2-beta \
+--add-module=/root/ngx-build/ngx_pagespeed-release-1.9.32.3-beta \
 --add-module=/root/ngx-build/nginx_http_push_module \
 --add-module=/root/ngx-build/ngx-fancyindex \
 --add-module=/root/ngx-build/nginx-dav-ext-module \
