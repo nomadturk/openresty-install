@@ -362,9 +362,9 @@ cd nginx-1.7.9
 --add-module=/root/ngx-build/websockify-nginx-module \
 --add-module=/root/ngx-build/nginx-upstream-fair 
 else
-wget http://openresty.org/download/ngx_openresty-1.7.7.1.tar.gz
-tar -xvzf ngx_openresty-1.7.7.1.tar.gz
-cd ngx_openresty-1.7.7.1
+wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz
+tar -xvzf ngx_openresty-1.7.10.1.tar.gz
+cd ngx_openresty-1.7.10.1
 ./configure \
 --prefix=/usr/local/nginx/  \
 --sbin-path=/usr/sbin/nginx \
@@ -464,9 +464,6 @@ cd ~/
 git clone https://github.com/nomadturk/nginx-conf.git
 cd nginx-conf
 mv -f * /etc/nginx/
-git clone https://github.com/h5bp/server-configs-nginx.git
-cd server-configs-nginx
-mv -f h5bp mime.types doc/ /etc/nginx
 cd ~/
 rm -r ~/nginx-conf
 
