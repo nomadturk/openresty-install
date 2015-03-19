@@ -1,6 +1,19 @@
 #!/bin/bash
 # you have write permissions there. set RETAIN_NUM_LINES to the
 
+###################################################################
+##								 ##
+##								 ##
+##	Down below, it's a mess... 				 ##
+##	Now it'll try to do it's best.				 ##
+##								 ##
+##								 ##
+###################################################################
+#     A bit of cleanup first, just in case there're old stuff	 #
+rm -r ~/ngx-build ~/src-build ~/nginx-package ~/Time* ~/Install.log
+###################################################################
+
+
 ### Setup Logging
 LOGFILE=~/Install.log
 RETAIN_NUM_LINES=10
@@ -67,18 +80,6 @@ if [ "$LINUX_DISTRO" != "Ubuntu" ] && [ "$LINUX_DISTRO" != "Debian" ]; then
 	show_progress_error "Sorry, only Debian 7 and Ubuntu 14.04 is supported as of now"
 	exit 1
 fi
-
-###################################################################
-##								 ##
-##								 ##
-##	Down below, it's a mess... 				 ##
-##	Now it'll try to do it's best.				 ##
-##								 ##
-##								 ##
-###################################################################
-#     A bit of cleanup first, just in case there're old stuff	 #
-rm -r ~/ngx-build ~/src-build ~/nginx-package ~/Time* ~/Install.log
-###################################################################
 
 
 show_progress "The script will terminate if any error to happen."
