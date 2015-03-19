@@ -2,7 +2,7 @@
 # you have write permissions there. set RETAIN_NUM_LINES to the
 
 ### Setup Logging
-LOGFILE=Install.log
+LOGFILE=~/Install.log
 RETAIN_NUM_LINES=10
 
 function logsetup {
