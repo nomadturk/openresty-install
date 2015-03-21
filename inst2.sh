@@ -516,7 +516,8 @@ fi
  
 
 apt-get update
-apt-get -y --force-yes install php5-fpm php5-mysql php5-xcache memcached php5-memcache php5-memcached
+apt-get -y --force-yes install php5-xcache
+apt-get -y --force-yes install php5-fpm php5-mysql memcached php5-memcache php5-memcached
 apt-get -y --force-yes install php5-mcrypt php5-cli php5-curl php5-gd php5-json php5-sqlite php5-pspell php5-readline php5-recode php5-xmlrpc php5-xsl php5-intl php5-imagick php5-tidy
 
 show_progress "Time for a bit of tweaks"
