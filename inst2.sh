@@ -464,6 +464,7 @@ cd ~/
 git clone https://github.com/nomadturk/nginx-conf.git
 cd nginx-conf
 mv -f * /etc/nginx/
+mv -f sites-enabled/* /etc/nginx/sites-enabled/
 cd ~/
 rm -r ~/nginx-conf
 
