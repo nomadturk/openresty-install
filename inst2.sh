@@ -107,8 +107,8 @@ update-locale en_US.UTF-8
 # Remove any existing packages:
 show_progress "Doing a system upgrade and removing ffmpeg files if there any."
 apt-get -y --force-yes dist-upgrade >> /dev/null
-apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm >> /dev/null
-apt-get -y --force-yes install software-properties-common python-software-properties >> /dev/null
+#apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm >> /dev/null
+#apt-get -y --force-yes install software-properties-common python-software-properties >> /dev/null
 
 #Lets calculate how much time is spent
 # We don't need this apt-get dist-upgrade process to be counted. So, the timer starts here.
@@ -125,9 +125,9 @@ if [ "$LINUX_DISTRO" == "Debian" ]; then
 elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
 	#Ubuntu
 	show_progress "Adding Ubuntu repository for FFMpeg and installing Ubuntu only stuff"
-	apt-add-repository multiverse
-	add-apt-repository -y ppa:jon-severinsson/ffmpeg
-	apt-get update
+	#apt-add-repository multiverse
+	#add-apt-repository -y ppa:jon-severinsson/ffmpeg
+	#apt-get update
 	apt-get -y --force-yes install libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev
 fi
 
