@@ -107,8 +107,8 @@ update-locale en_US.UTF-8
 # Remove any existing packages:
 show_progress "Doing a system upgrade and removing ffmpeg files if there any."
 apt-get -y --force-yes dist-upgrade >> /dev/null
-#apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm >> /dev/null
-#apt-get -y --force-yes install software-properties-common python-software-properties >> /dev/null
+apt-get -y --force-yes remove ffmpeg x264 libav-tools libvpx-dev libx264-dev yasm >> /dev/null
+apt-get -y --force-yes install software-properties-common python-software-properties >> /dev/null
 
 #Lets calculate how much time is spent
 # We don't need this apt-get dist-upgrade process to be counted. So, the timer starts here.
@@ -153,141 +153,150 @@ show_progress_info "Installing necessary packages apt-get update, please wait $(
 apt-get -y --force-yes install libgeoip-dev >> /dev/null
 
 
-show_progress "Start FFMpeg Installation"		
-show_progress "Depending on your CPU this might take a long while"		
-##################################################################Start FFMPEG 		
-mkdir -p ~/src-build/build-ffmpeg		
-mkdir -p ~/ngx-build/		
-#apt-get -y --force-yes install yasm		
-show_progress "		Installing yasm"		
-################################### First, install yasm		
-# YASM refused to install on ppc64le system. At least it broke the script. So let me try fixing it.		
-if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then		
-	show_progress_error "Downloading YASM from the repository since we dont know your system architecture"		
-else		
-    cd ~/src-build/build-ffmpeg		
-	git clone git://github.com/yasm/yasm.git		
-	cd yasm		
-	./autogen.sh x86_64 i386 amd64		
-	# ./configure x86_64 i386 amd64		
-	make		
-	checkinstall --pkgname=yasm --pkgversion="1.3.0" --backup=no \		
-	--deldoc=yes --fstrans=no --default		
-fi		
-  		
-show_progress "		Installing libx246"		
-################################### libx264		
-cd ~/src-build/build-ffmpeg		
-# They have git but I had connectivity errors with them so..		
-# git clone --depth 1 git://git.videolan.org/x264		
-#cd x264		
-# Check Linux distro		
-# On RunAbove Power8 systems due to system bein ppc64le the script didn't work. So, here's my workaround.		
-# if [[ $LINUX_ARCH == "x86_64" ]] && [[ $LINUX_ARCH == "i386" ]] && [[ $LINUX_ARCH == "i486" ]] && [[ $LINUX_ARCH == "amd64" ]] && [[ $LINUX_ARCH == "x86" ]] && [[ $LINUX_ARCH == "powerpc" ]] && [[ $LINUX_ARCH == "powerpc64" ]] && [[ $LINUX_ARCH == "sparc" ]] && [[ $LINUX_ARCH == "aarch64" ]] && [[ $LINUX_ARCH == "s390" ]] && [[ $LINUX_ARCH == "hppa*" ]] && [[ $LINUX_ARCH == "alpha*" ]]; then		
-if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ] && [ "$LINUX_ARCH" != "powerpc" ] && [ "$LINUX_ARCH" != "powerpc64" ] && [ "$LINUX_ARCH" != "sparc" ] && [ "$LINUX_ARCH" != "aarch64" ] && [ "$LINUX_ARCH" != "s390" ] && [ "$LINUX_ARCH" != "hppa*" ] && [ "$LINUX_ARCH" != "alpha*" ]; then		
-	show_progress_error "Sorry, architecture is not supported. Let's see if the repos has this"		
-	apt-get -y --force-yes install libx264-dev		
-else		
-	wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2		
-	tar xjvf last_x264.tar.bz2		
-	cd x264-snapshot*		
-	./configure --enable-static		
-	make		
-	checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \		
-		awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \		
-		--fstrans=no --default		
-fi		
-show_progress "	Installing fdk-aac"		
-################################### fdk-aac		
-cd ~/src-build/build-ffmpeg		
-git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git		
-cd fdk-aac		
-./autogen.sh		
-autoreconf -fiv		
-./configure --disable-shared		
-make		
-checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \		
-  --deldoc=yes --fstrans=no --default		
-show_progress "		Installing libvpx" 		
-################################### libvpx		
-cd ~/src-build/build-ffmpeg		
-git clone --depth 1 http://git.chromium.org/webm/libvpx.git		
-cd libvpx		
-./configure --disable-examples --disable-unit-tests		
-make		
-checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=no \		
-  --deldoc=yes --fstrans=no --default		
- show_progress "		Installing opus"		
-################################### opus		
-cd ~/src-build/build-ffmpeg		
-git clone --depth 1 git://git.xiph.org/opus.git		
-cd opus		
-./autogen.sh		
-./configure --disable-shared		
-make		
-checkinstall --pkgname=libopus --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \		
-  --deldoc=yes --fstrans=no --default		
-#show_progress "		Installing libmp3lame"		
-################################### libmp3lame		
-# doesn't install in ubuntu, ends up with an error		
-#apt-get -y --force-yes install nasm		
-#cd ~/src-build/build-ffmpeg		
-#wget http://downloads.sourceforge.net/project/lame/lame/3.99/lame-3.99.5.tar.gz		
-#tar xzvf lame-3.99.5.tar.gz		
-#cd lame-3.99.5		
-#./configure --enable-nasm --disable-shared		
-#make		
-#checkinstall --fstrans=no --pkgname=lame-ffmpeg --pkgversion="3.98.4" --backup=no --default --deldoc=yes		
-show_progress "		Installing librtmp"		
-#################################### librtmp		
-# Let's install what's needed...		
-if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then		
-	# Systems such as ppc64 does have trouble compiling this...		
-	show_progress_error "Warning! This will affect the total time since instead of compiling, I will be using the librtmp-dev from the repos"		
-	apt-get install librtmp-dev		
-else		
-	cd ~/src-build/build-ffmpeg		
-	git clone git://git.ffmpeg.org/rtmpdump		
-	cd rtmpdump		
-	make SYS=posix		
-	checkinstall --pkgname=rtmpdump --pkgversion="2:$(date +%Y%m%d%H%M)-git" --backup=no \		
-    --deldoc=yes --fstrans=no --default		
-	export LD_LIBRARY_PATH=/usr/local/lib/		
-fi		
-show_progress "Now... Using all above, compiling FFMpeg"		
-################################### Finally, ffmpeg		
-cd ~/src-build/build-ffmpeg		
-git clone https://github.com/FFmpeg/FFmpeg.git		
-cd FFmpeg		
-./configure \		
-  --enable-gpl \		
-  --enable-libass \		
-  --enable-libfdk-aac \		
-  --enable-libfreetype \		
-  --enable-libmp3lame \		
-  --enable-libopus \		
-  --enable-libtheora \		
-  --enable-libvorbis \		
-  --enable-libvpx \		
-  --enable-libx264 \		
-  --enable-nonfree \		
-  --enable-libfaac \		
-  --enable-libopencore-amrnb \		
-  --enable-libopencore-amrwb \		
-  --enable-postproc \		
-  --enable-version3 \		
-  --enable-librtmp \		
-  --enable-libxvid \		
-  --enable-libgsm \		
-  --enable-zlib \		
-  --enable-swscale \		
-  --enable-pthreads		
-make		
-checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \		
-  --deldoc=yes --fstrans=no --default		
-hash -r		
-################################################################### END OF FFPMEG		
-###################################################################		
+show_progress "Start FFMpeg Installation"
+show_progress "Depending on your CPU this might take a long while"
+##################################################################Start FFMPEG 
+mkdir -p ~/src-build/build-ffmpeg
+mkdir -p ~/ngx-build/
+#apt-get -y --force-yes install yasm
+show_progress "		Installing yasm"
+################################### First, install yasm
+# YASM refused to install on ppc64le system. At least it broke the script. So let me try fixing it.
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
+	show_progress_error "Downloading YASM from the repository since we dont know your system architecture"
+else
+    cd ~/src-build/build-ffmpeg
+	git clone git://github.com/yasm/yasm.git
+	cd yasm
+	./autogen.sh x86_64 i386 amd64
+	# ./configure x86_64 i386 amd64
+	make
+	checkinstall --pkgname=yasm --pkgversion="1.3.0" --backup=no \
+	--deldoc=yes --fstrans=no --default
+fi
+
+  
+show_progress "		Installing libx246"
+################################### libx264
+cd ~/src-build/build-ffmpeg
+# They have git but I had connectivity errors with them so..
+# git clone --depth 1 git://git.videolan.org/x264
+#cd x264
+
+
+# Check Linux distro
+# On RunAbove Power8 systems due to system bein ppc64le the script didn't work. So, here's my workaround.
+# if [[ $LINUX_ARCH == "x86_64" ]] && [[ $LINUX_ARCH == "i386" ]] && [[ $LINUX_ARCH == "i486" ]] && [[ $LINUX_ARCH == "amd64" ]] && [[ $LINUX_ARCH == "x86" ]] && [[ $LINUX_ARCH == "powerpc" ]] && [[ $LINUX_ARCH == "powerpc64" ]] && [[ $LINUX_ARCH == "sparc" ]] && [[ $LINUX_ARCH == "aarch64" ]] && [[ $LINUX_ARCH == "s390" ]] && [[ $LINUX_ARCH == "hppa*" ]] && [[ $LINUX_ARCH == "alpha*" ]]; then
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ] && [ "$LINUX_ARCH" != "powerpc" ] && [ "$LINUX_ARCH" != "powerpc64" ] && [ "$LINUX_ARCH" != "sparc" ] && [ "$LINUX_ARCH" != "aarch64" ] && [ "$LINUX_ARCH" != "s390" ] && [ "$LINUX_ARCH" != "hppa*" ] && [ "$LINUX_ARCH" != "alpha*" ]; then
+	show_progress_error "Sorry, architecture is not supported. Let's see if the repos has this"
+	apt-get -y --force-yes install libx264-dev
+else
+	wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
+	tar xjvf last_x264.tar.bz2
+	cd x264-snapshot*
+	./configure --enable-static
+	make
+	checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
+		awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
+		--fstrans=no --default
+fi
+
+show_progress "	Installing fdk-aac"
+################################### fdk-aac
+cd ~/src-build/build-ffmpeg
+git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
+cd fdk-aac
+./autogen.sh
+autoreconf -fiv
+./configure --disable-shared
+make
+checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+show_progress "		Installing libvpx" 
+################################### libvpx
+cd ~/src-build/build-ffmpeg
+git clone --depth 1 http://git.chromium.org/webm/libvpx.git
+cd libvpx
+./configure --disable-examples --disable-unit-tests
+make
+checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+
+ show_progress "		Installing opus"
+################################### opus
+cd ~/src-build/build-ffmpeg
+git clone --depth 1 git://git.xiph.org/opus.git
+cd opus
+./autogen.sh
+./configure --disable-shared
+make
+checkinstall --pkgname=libopus --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+
+
+#show_progress "		Installing libmp3lame"
+################################### libmp3lame
+# doesn't install in ubuntu, ends up with an error
+apt-get -y --force-yes install nasm
+#cd ~/src-build/build-ffmpeg
+#wget http://downloads.sourceforge.net/project/lame/lame/3.99/lame-3.99.5.tar.gz
+#tar xzvf lame-3.99.5.tar.gz
+#cd lame-3.99.5
+#./configure --enable-nasm --disable-shared
+#make
+#checkinstall --fstrans=no --pkgname=lame-ffmpeg --pkgversion="3.98.4" --backup=no --default --deldoc=yes
+
+show_progress "		Installing librtmp"
+#################################### librtmp
+# Let's install what's needed...
+if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
+	# Systems such as ppc64 does have trouble compiling this...
+	show_progress_error "Warning! This will affect the total time since instead of compiling, I will be using the librtmp-dev from the repos"
+	apt-get install librtmp-dev
+else
+	cd ~/src-build/build-ffmpeg
+	git clone git://git.ffmpeg.org/rtmpdump
+	cd rtmpdump
+	make SYS=posix
+	checkinstall --pkgname=rtmpdump --pkgversion="2:$(date +%Y%m%d%H%M)-git" --backup=no \
+    --deldoc=yes --fstrans=no --default
+	export LD_LIBRARY_PATH=/usr/local/lib/
+fi
+
+show_progress "Now... Using all above, compiling FFMpeg"
+################################### Finally, ffmpeg
+cd ~/src-build/build-ffmpeg
+git clone https://github.com/FFmpeg/FFmpeg.git
+cd FFmpeg
+./configure \
+  --enable-gpl \
+  --enable-libass \
+  --enable-libfdk-aac \
+  --enable-libfreetype \
+  --enable-libmp3lame \
+  --enable-libopus \
+  --enable-libtheora \
+  --enable-libvorbis \
+  --enable-libvpx \
+  --enable-libx264 \
+  --enable-nonfree \
+  --enable-libfaac \
+  --enable-libopencore-amrnb \
+  --enable-libopencore-amrwb \
+  --enable-postproc \
+  --enable-version3 \
+  --enable-librtmp \
+  --enable-libxvid \
+  --enable-libgsm \
+  --enable-zlib \
+  --enable-swscale \
+  --enable-pthreads
+make
+checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+hash -r
+################################################################### END OF FFPMEG
+###################################################################
 ###################################################################
 
 show_progress "Installing ImageMagick"
@@ -741,7 +750,7 @@ read -s -n 1 any_key | show_progress_info "Press a key to exit now..." && wait
 # update-rc.d apache2 remove
 # apt-get -y --force-yes install webmin-virtualmin-nginx webmin-virtualmin-nginx-ssl
 # apt-mark hold ffmpeg
-# apt-mark hold nginx
+apt-mark hold nginx
 # apt-mark hold mysql-common
 
 
