@@ -138,7 +138,7 @@ apt-get -y --force-yes install openssl autoconf make automake g++ bzip2 >> /dev/
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1).........."
 apt-get -y --force-yes install texi2html zlib1g-dev libfreetype6-dev libtool pkg-config >> /dev/null
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)............."
-apt-get -y --force-yes install libssl1.0.0 libssl-dev  >> /dev/null
+apt-get -y --force-yes install libssl1.0.0 libssl-dev libgsm1-dev libxvidcore-dev libxvidcore4 libass-dev librtmp-dev libmp3lame-dev >> /dev/null
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)................"
 apt-get -y --force-yes install libpcre3 libpcre3-dev unzip tar zip libpcrecpp0 >> /dev/null
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..................."
@@ -150,7 +150,7 @@ apt-get -y --force-yes install libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxs
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)............................"
 apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52 libbz2-dev >> /dev/null
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..............................."
-apt-get -y --force-yes install libgeoip-dev >> /dev/null
+apt-get -y --force-yes install libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev libfaac-dev libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev  >> /dev/null
 
 
 show_progress "Start FFMpeg Installation"
