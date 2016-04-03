@@ -248,13 +248,13 @@ git clone https://github.com/openssl/openssl.git
 show_progress "		Installing ngx_pagespeed"
 ######################################### ngx_pagespeed
 cd /root/ngx-build/
-wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.9.32.3-beta.zip
-unzip release-1.9.32.3-beta.zip
-cd ngx_pagespeed-release-1.9.32.3-beta/
+wget https://github.com/pagespeed/ngx_pagespeed/archive/release-1.11.33.0-beta.zip
+unzip release-1.11.33.0-beta.zip
+cd ngx_pagespeed-release-1.11.33.0-beta/
 show_progress "		Installing psol for ngx_pagespeed"
 # Can change it with the https one. But it is slower.
-wget http://dl.google.com/dl/page-speed/psol/1.9.32.3.tar.gz
-tar -xzvf 1.9.32.3.tar.gz   # extracts to psol/
+wget http://dl.google.com/dl/page-speed/psol/1.11.33.0.tar.gz
+tar -xzvf 1.11.33.0.tar.gz   # extracts to psol/
 
 # Timer reminder
 DIFFX=$(( $(date +%s) - $START )) 
@@ -302,9 +302,9 @@ if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARC
 	#Ubuntu
 	show_progress_error "Warning, Openresty can not be compiled with pcre-jit module on PowerPC, replacing it with Nginx!"
 	show_progress_error "Also ngx_pagespeed won't compile on ppc architecture either. So skipping it..."
-wget http://nginx.org/download/nginx-1.7.10.tar.gz
-tar -xvzf nginx-1.7.10.tar.gz
-cd nginx-1.7.10
+wget http://nginx.org/download/nginx-1.9.7.tar.gz
+tar -xvzf nginx-1.9.7.tar.gz
+cd nginx-1.9.7
 
 ./configure \
 --prefix=/usr/local/nginx/  \
@@ -362,9 +362,9 @@ cd nginx-1.7.10
 --add-module=/root/ngx-build/websockify-nginx-module \
 --add-module=/root/ngx-build/nginx-upstream-fair 
 else
-wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz
-tar -xvzf ngx_openresty-1.7.10.1.tar.gz
-cd ngx_openresty-1.7.10.1
+wget http://openresty.org/download/ngx_openresty-1.9.7.4.tar.gz
+tar -xvzf ngx_openresty-1.9.7.4.tar.gz
+cd ngx_openresty-1.9.7.4
 ./configure \
 --prefix=/usr/local/nginx/  \
 --sbin-path=/usr/sbin/nginx \
@@ -415,7 +415,7 @@ cd ngx_openresty-1.7.10.1
 --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
 --with-openssl=/root/ngx-build/openssl \
 --add-module=/root/ngx-build/nginx-upload-progress-module \
---add-module=/root/ngx-build/ngx_pagespeed-release-1.9.32.3-beta \
+--add-module=/root/ngx-build/ngx_pagespeed-release-1.11.33.0-beta \
 --add-module=/root/ngx-build/nginx_http_push_module \
 --add-module=/root/ngx-build/ngx-fancyindex \
 --add-module=/root/ngx-build/nginx-dav-ext-module \
@@ -594,29 +594,29 @@ show_progress_info "This is of course excluding the time spent at MariaDB Passwo
 #echo "Hurray! In mere "$(($DIFF / 3600 ))"" hours "$(($DIFF / 60 ))" minutes and "$(($DIFF % 60 ))" seconds all is finished! Congrats dude..." >>Time.Output
 read -s -n 1 any_key | show_progress_info "Press a key to exit now..." && wait
 
-wget -O VirtMin.sh http://software.virtualmin.com/gpl/scripts/install.sh
-sed -i '/debdeps=/s/ mysql-/ mariadb-/g' VirtMin.sh
-chmod +x VirtMin.sh
-bash -c "bash VirtMin.sh"
-/etc/init.d/apache2 stop
-update-rc.d apache2 remove
-apt-get -y --force-yes install webmin-virtualmin-nginx webmin-virtualmin-nginx-ssl
-apt-mark hold ffmpeg
-apt-mark hold nginx
-apt-mark hold mysql-common
+# wget -O VirtMin.sh http://software.virtualmin.com/gpl/scripts/install.sh
+# sed -i '/debdeps=/s/ mysql-/ mariadb-/g' VirtMin.sh
+# chmod +x VirtMin.sh
+# bash -c "bash VirtMin.sh"
+# /etc/init.d/apache2 stop
+# update-rc.d apache2 remove
+# apt-get -y --force-yes install webmin-virtualmin-nginx webmin-virtualmin-nginx-ssl
+# apt-mark hold ffmpeg
+# apt-mark hold nginx
+# apt-mark hold mysql-common
 
 
 ############################################################### Install Webmin Themes
-cd ~/src-build
-wget http://theme.winfuture.it/bwtheme.wbt.gz -4
-wget --no-check-certificate https://github.com/qooob/authentic-theme/archive/master.zip
-wget http://www.turnkeylinux.org/files/attachments/theme-metal_0.tar
-wget http://www.xenlayer.com/xenlayer-theme.wbt.gz
-wget http://www.luizlopes.com/virtualmin/finally-theme-0.3.wbt.gz
-tar -xvf theme-metal_0.tar
-unzip master.zip
-tar -xvzf bwtheme.wbt.gz
-tar xvzf xenlayer-theme.wbt.gz
-tar xvzf finally-theme-0.3.wbt.gz
-mv bootstrap/ theme-metal/ authentic-theme-master/ xenlayer-theme/ virtual-server-theme/ /usr/share/webmin/
+# cd ~/src-build
+# wget http://theme.winfuture.it/bwtheme.wbt.gz -4
+# wget --no-check-certificate https://github.com/qooob/authentic-theme/archive/master.zip
+# wget http://www.turnkeylinux.org/files/attachments/theme-metal_0.tar
+# wget http://www.xenlayer.com/xenlayer-theme.wbt.gz
+# wget http://www.luizlopes.com/virtualmin/finally-theme-0.3.wbt.gz
+# tar -xvf theme-metal_0.tar
+# unzip master.zip
+# tar -xvzf bwtheme.wbt.gz
+# tar xvzf xenlayer-theme.wbt.gz
+# tar xvzf finally-theme-0.3.wbt.gz
+# mv bootstrap/ theme-metal/ authentic-theme-master/ xenlayer-theme/ virtual-server-theme/ /usr/share/webmin/
 ############################################################### Install Webmin Themes End
