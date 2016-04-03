@@ -215,7 +215,7 @@ checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=n
 show_progress "		Installing libvpx" 
 ################################### libvpx
 cd ~/src-build/build-ffmpeg
-git clone https://chromium.googlesource.com/chromium/deps/libvpx
+git clone https://chromium.googlesource.com/webm/libvpx
 cd libvpx
 ./configure --disable-examples --disable-unit-tests
 make
