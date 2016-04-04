@@ -511,8 +511,8 @@ cd nginx-1.9.7
 --add-module=/root/ngx-build/nginx-upstream-fair 
 else
 wget https://openresty.org/download/openresty-1.9.7.4.tar.gz
-tar -xvzf ngx_openresty-1.9.7.4.tar.gz
-cd ngx_openresty-1.9.7.4
+tar -xvzf openresty-1.9.7.4.tar.gz
+cd openresty-1.9.7.4
 ./configure \
 --prefix=/usr/local/nginx/  \
 --sbin-path=/usr/sbin/nginx \
