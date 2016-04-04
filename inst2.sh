@@ -454,7 +454,7 @@ tar -xvzf nginx-1.9.7.tar.gz
 cd nginx-1.9.7
 
 ./configure \
---prefix=/usr/local/nginx/  \
+--prefix=/usr/local/nginx  \
 --sbin-path=/usr/sbin/nginx \
 --conf-path=/etc/nginx/nginx.conf \
 --pid-path=/var/run/nginx.pid \
@@ -473,7 +473,7 @@ cd nginx-1.9.7
 --with-http_gzip_static_module \
 --with-http_image_filter_module \
 --with-http_realip_module \
---with-http_ssl_module \
+--with-http_v2_module--with-http_realip_module \
 --with-http_sub_module \
 --with-http_xslt_module \
 --with-ipv6 \
@@ -496,7 +496,7 @@ cd nginx-1.9.7
 --with-http_stub_status_module \
 --with-google_perftools_module \
 --with-http_gunzip_module \
---with-http_spdy_module \
+--with-http_v2_module \
 --with-file-aio \
 --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
 --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
@@ -514,7 +514,7 @@ wget https://openresty.org/download/openresty-1.9.7.4.tar.gz
 tar -xvzf openresty-1.9.7.4.tar.gz
 cd openresty-1.9.7.4
 ./configure \
---prefix=/usr/local/nginx/  \
+--prefix=/usr/local/nginx  \
 --sbin-path=/usr/sbin/nginx \
 --conf-path=/etc/nginx/nginx.conf \
 --pid-path=/var/run/nginx.pid \
@@ -557,7 +557,7 @@ cd openresty-1.9.7.4
 --with-http_stub_status_module \
 --with-google_perftools_module \
 --with-http_gunzip_module \
---with-http_spdy_module \
+--with-http_v2_module \
 --with-file-aio \
 --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
 --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
