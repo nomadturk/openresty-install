@@ -151,7 +151,8 @@ show_progress_info "Installing necessary packages apt-get update, please wait $(
 apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52 libbz2-dev >> /dev/null
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..............................."
 apt-get -y --force-yes install libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev libfaac-dev libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev  >> /dev/null
-
+#Debian 8 doesn't have libjpeg8 so let's install another and some others
+apt-get -y --force-yes install libjpeg62-turbo-dev libvorbis-dev libgsm1-dev libspeex-dev libschroedinger-dev libvo-aacenc-dev libvo-amrwbenc-dev libbluray-dev libcdio-dev libgnutls28-dev libass-dev libpulse-dev libvidstab-dev libzvbi-dev libutvideo-dev libx265-dev libiec61883-dev
 
 show_progress "Start FFMpeg Installation"
 show_progress "Depending on your CPU this might take a long while"
