@@ -483,7 +483,7 @@ cd nginx-1.9.7
 --with-http_gzip_static_module \
 --with-http_image_filter_module \
 --with-http_realip_module \
---with-http_realip_module \
+--with-http_ssl_module \
 --with-http_sub_module \
 --with-http_xslt_module \
 --with-ipv6 \
