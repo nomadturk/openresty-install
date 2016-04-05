@@ -390,7 +390,17 @@ show_progress "Now, let's start Nginx installation"
 show_progress "		Installing OpenSSL"
 ######################################### OpenSSL
 cd /root/ngx-build/
-git clone https://github.com/openssl/openssl.git
+# Problems with compiling occured
+#git clone https://github.com/openssl/openssl.git
+wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz
+tar -zvxf openssl-1.0.2g.tar.gz
+mv openssl-1.0.2g openssl
+
+show_progress "		Installing pcre"
+######################################### pcre
+wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.gz
+tar -xvf pcre-8.38.tar.gz
+mv pcre-8.38 pcre
 
 show_progress "		Installing ngx_pagespeed"
 ######################################### ngx_pagespeed
@@ -473,7 +483,8 @@ cd nginx-1.9.7
 --with-http_gzip_static_module \
 --with-http_image_filter_module \
 --with-http_realip_module \
---with-http_v2_module--with-http_realip_module \
+--with-http_v2_module \
+--with-http_realip_module \
 --with-http_sub_module \
 --with-http_xslt_module \
 --with-ipv6 \
@@ -501,6 +512,7 @@ cd nginx-1.9.7
 --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
 --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
 --with-openssl=/root/ngx-build/openssl \
+--with-pcre=/root/ngx-build/pcre \
 --add-module=/root/ngx-build/nginx-upload-progress-module \
 --add-module=/root/ngx-build/nginx_http_push_module \
 --add-module=/root/ngx-build/ngx-fancyindex \
@@ -538,7 +550,6 @@ cd openresty-1.9.7.4
 --with-http_xslt_module \
 --with-ipv6 \
 --with-debug  \
---with-pcre-jit  \
 --with-sha1=/usr/include/openssl \
 --with-md5=/usr/include/openssl \
 --user=www-data \
@@ -562,6 +573,7 @@ cd openresty-1.9.7.4
 --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
 --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
 --with-openssl=/root/ngx-build/openssl \
+--with-pcre=/root/ngx-build/pcre \
 --add-module=/root/ngx-build/nginx-upload-progress-module \
 --add-module=/root/ngx-build/ngx_pagespeed-release-1.11.33.0-beta \
 --add-module=/root/ngx-build/nginx_http_push_module \
