@@ -391,10 +391,10 @@ show_progress "		Installing OpenSSL"
 ######################################### OpenSSL
 cd /root/ngx-build/
 # Problems with compiling occured
-#git clone https://github.com/openssl/openssl.git
-wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz
-tar -zvxf openssl-1.0.2g.tar.gz
-mv openssl-1.0.2g openssl
+git clone https://github.com/openssl/openssl.git
+#wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz
+#tar -zvxf openssl-1.0.2g.tar.gz
+#mv openssl-1.0.2g openssl
 
 show_progress "		Installing pcre"
 ######################################### pcre
@@ -483,7 +483,6 @@ cd nginx-1.9.7
 --with-http_gzip_static_module \
 --with-http_image_filter_module \
 --with-http_realip_module \
---with-http_v2_module \
 --with-http_realip_module \
 --with-http_sub_module \
 --with-http_xslt_module \
@@ -514,6 +513,7 @@ cd nginx-1.9.7
 --with-openssl=/root/ngx-build/openssl \
 --with-pcre=/root/ngx-build/pcre \
 --add-module=/root/ngx-build/nginx-upload-progress-module \
+--add-module=/root/ngx-build/ngx_pagespeed-release-1.11.33.0-beta \
 --add-module=/root/ngx-build/nginx_http_push_module \
 --add-module=/root/ngx-build/ngx-fancyindex \
 --add-module=/root/ngx-build/nginx-dav-ext-module \
