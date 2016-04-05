@@ -291,7 +291,7 @@ cd FFmpeg
   --enable-libgsm \
   --enable-zlib \
   --enable-swscale \
-  --enable-pthreads
+  --enable-pthreads -j2
 make
 checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
@@ -496,14 +496,11 @@ cd nginx-1.9.7
 --without-mail_pop3_module \
 --without-mail_imap_module \
 --without-mail_smtp_module \
---with-http_stub_status_module \
 --with-http_secure_link_module \
---with-http_sub_module \
 --with-http_addition_module \
 --with-http_geoip_module  \
 --with-http_perl_module \
 --with-http_random_index_module \
---with-http_stub_status_module \
 --with-google_perftools_module \
 --with-http_gunzip_module \
 --with-http_v2_module \
@@ -520,7 +517,7 @@ cd nginx-1.9.7
 --add-module=/root/ngx-build/ngx_cache_purge \
 --add-module=/root/ngx-build/nginx-rtmp-module \
 --add-module=/root/ngx-build/websockify-nginx-module \
---add-module=/root/ngx-build/nginx-upstream-fair 
+--add-module=/root/ngx-build/nginx-upstream-fair -j2
 else
 wget https://openresty.org/download/openresty-1.9.7.4.tar.gz
 tar -xvzf openresty-1.9.7.4.tar.gz
@@ -558,14 +555,11 @@ cd openresty-1.9.7.4
 --without-mail_pop3_module \
 --without-mail_imap_module \
 --without-mail_smtp_module \
---with-http_stub_status_module \
 --with-http_secure_link_module \
---with-http_sub_module \
 --with-http_addition_module \
 --with-http_geoip_module  \
 --with-http_perl_module \
 --with-http_random_index_module \
---with-http_stub_status_module \
 --with-google_perftools_module \
 --with-http_gunzip_module \
 --with-http_v2_module \
@@ -582,7 +576,7 @@ cd openresty-1.9.7.4
 --add-module=/root/ngx-build/ngx_cache_purge \
 --add-module=/root/ngx-build/nginx-rtmp-module \
 --add-module=/root/ngx-build/websockify-nginx-module \
---add-module=/root/ngx-build/nginx-upstream-fair 
+--add-module=/root/ngx-build/nginx-upstream-fair -j2
 fi
 
 make
