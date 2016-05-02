@@ -17,6 +17,8 @@ function log {
 logsetup
 ### Logging started
 
+CORES=$(grep -c ^processor /proc/cpuinfo)
+
 # Yellow
 function show_progress ()
 {
@@ -122,14 +124,34 @@ if [ "$LINUX_DISTRO" == "Debian" ]; then
 	show_progress "Adding multimedia repository and doing an apt-get update."
 	add-apt-repository -y 'deb http://www.deb-multimedia.org wheezy main non-free'
 	apt-get update
-	apt-get -y --force-yes install deb-multimedia-keyring  libswresample0
+	apt-get -y --force-yes install deb-multimedia-keyring libswresample0 libjpeg62-turbo-dev libvidstab-dev libutvideo-dev libx265-dev
 elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
 	#Ubuntu
 	show_progress "Adding Ubuntu repository for FFMpeg and installing Ubuntu only stuff"
 	#apt-add-repository multiverse
 	#add-apt-repository -y ppa:jon-severinsson/ffmpeg
 	#apt-get update
-	apt-get -y --force-yes install libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev
+	apt-get -y --force-yes install cmake libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev libjpeg62-dev unzip
+	
+	cd /tmp/
+	git clone https://github.com/georgmartius/vid.stab.git
+	cd vid.stab/
+	cmake .
+	make
+	make install
+	rm -rf /tmp/vib.stab/
+	
+	cd /tmp/
+	wget http://www.deb-multimedia.org/pool/main/libu/libutvideo-dmo/libutvideo15_15.1.0-dmo2_amd64.deb
+	wget http://www.deb-multimedia.org/pool/main/libu/libutvideo-dmo/libutvideo-dev_15.1.0-dmo2_amd64.deb
+	dpkg -i libutvideo15_15.1.0-dmo2_amd64.deb
+	dpkg -i libutvideo-dev_15.1.0-dmo2_amd64.deb
+	rm -f libutvideo*
+	
+	wget http://de.archive.ubuntu.com/ubuntu/pool/universe/x/x265/libx265-59_1.7-4_amd64.deb
+	wget http://de.archive.ubuntu.com/ubuntu/pool/universe/x/x265/libx265-dev_1.7-4_amd64.deb
+	dpkg -i libx265-59_1.7-4_amd64.deb
+	dpkg -i libx265-dev_1.7-4_amd64.deb
 fi
 
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..."
@@ -153,7 +175,8 @@ apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-p
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..............................."
 apt-get -y --force-yes install libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev libfaac-dev libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev  >> /dev/null
 #Debian 8 doesn't have libjpeg8 so let's install another and some others
-apt-get -y --force-yes install libjpeg62-turbo-dev libvorbis-dev libgsm1-dev libspeex-dev libschroedinger-dev libvo-aacenc-dev libvo-amrwbenc-dev libbluray-dev libcdio-dev libgnutls28-dev libass-dev libpulse-dev libvidstab-dev libzvbi-dev libutvideo-dev libx265-dev libiec61883-dev
+apt-get -y --force-yes install libvorbis-dev libgsm1-dev libspeex-dev libschroedinger-dev libvo-aacenc-dev libvo-amrwbenc-dev libbluray-dev libcdio-dev libgnutls28-dev libass-dev libpulse-dev libzvbi-dev libiec61883-dev
+
 
 show_progress "Start FFMpeg Installation"
 show_progress "Depending on your CPU this might take a long while"
@@ -280,6 +303,12 @@ cd FFmpeg
   --enable-libtheora \
   --enable-libvorbis \
   --enable-libvpx \
+  --enable-libvidstab \
+  --enable-libx265 \
+  --enable-libutvideo \
+  --enable-libjpeg \
+  --enable-shared \
+  --enable-pic \
   --enable-libx264 \
   --enable-nonfree \
   --enable-libfaac \
@@ -292,7 +321,7 @@ cd FFmpeg
   --enable-libgsm \
   --enable-zlib \
   --enable-swscale \
-  --enable-pthreads -j2
+  --enable-pthreads -j$CORES
 make
 checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
@@ -325,7 +354,7 @@ git clone git://git.sv.gnu.org/libunwind.git
 cd libunwind
 ./autogen.sh
 ./configure CFLAGS=-U_FORTIFY_SOURCE
-make 
+make -j$CORES
 make install
 
 show_progress "		Installing gperftools"
@@ -334,7 +363,7 @@ git clone https://code.google.com/p/gperftools-git/
 cd gperftools-git
 ./autogen.sh
 ./configure --prefix=/usr/local/gperftools --enable-shared --enable-frame-pointers
-make 
+make -j$CORES
 make install
 cp -r /usr/local/gperftools/lib/* /usr/local/lib/
 
@@ -361,7 +390,7 @@ git clone https://github.com/webmproject/libwebp.git
 cd libwebp
 ./autogen.sh
 ./configure
-make
+make-j$CORES
 make install	
 
 show_progress "Compile ImageMagick, shall we?"
@@ -378,8 +407,8 @@ cd ImageMagick*
 	--with-webp \
 	--with-gslib \
 	--with-perl=/usr/bin/perl \
-	--disable-static
-make
+	--disable-static -j$CORES
+make -j$CORES
 #checkinstall --fstrans=no --install=no -y 
 make install
 #cd ~/src-build/
@@ -449,9 +478,6 @@ cd /root/ngx-build/
 git clone https://github.com/aperezdc/ngx-fancyindex.git
 
 
-
-
-
 show_progress "Last... Getting, compiling nginx, doing some tweaks etc. Be patient, will you!"
 mkdir ~/nginx-package/
 cd ~/nginx-package/
@@ -518,7 +544,7 @@ cd nginx-1.9.7
 --add-module=/root/ngx-build/ngx_cache_purge \
 --add-module=/root/ngx-build/nginx-rtmp-module \
 --add-module=/root/ngx-build/websockify-nginx-module \
---add-module=/root/ngx-build/nginx-upstream-fair -j2
+--add-module=/root/ngx-build/nginx-upstream-fair -j$CORES
 else
 wget https://openresty.org/download/openresty-1.9.7.4.tar.gz
 tar -xvzf openresty-1.9.7.4.tar.gz
@@ -577,10 +603,10 @@ cd openresty-1.9.7.4
 --add-module=/root/ngx-build/ngx_cache_purge \
 --add-module=/root/ngx-build/nginx-rtmp-module \
 --add-module=/root/ngx-build/websockify-nginx-module \
---add-module=/root/ngx-build/nginx-upstream-fair -j2
+--add-module=/root/ngx-build/nginx-upstream-fair -j$CORES
 fi
 
-make
+make -j$CORES
 #make install
 
 # mkdir -p /var/cache/nginx/{client,scgi,uwsgi,fastcgi,proxy}
