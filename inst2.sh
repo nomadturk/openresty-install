@@ -115,7 +115,7 @@ elif [ "$LINUX_DISTRO" == "Ubuntu" ] && [ "$LINUX_DISTRO" != "LinuxMint" ]; then
 	#apt-add-repository multiverse
 	#add-apt-repository -y ppa:jon-severinsson/ffmpeg
 	#apt-get update
-	apt-get -y --force-yes install cmake libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev libjpeg62-dev unzip
+	apt-get -y --force-yes install cmake libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev libjpeg62-dev unzip librtmp0 librtmp-dev
 	
 	cd /tmp/
 	git clone https://github.com/georgmartius/vid.stab.git
@@ -216,6 +216,9 @@ fi
 show_progress "	Installing fdk-aac"
 ################################### fdk-aac
 cd ~/src-build/build-ffmpeg
+    if [ -d ~/src-build/build-ffmpeg/fdk-aac ]; then
+       rm -rf ~/src-build/build-ffmpeg/fdk-aac/
+    fi
 git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
 cd fdk-aac
 ./autogen.sh
@@ -227,6 +230,9 @@ checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=n
 show_progress "		Installing libvpx" 
 ################################### libvpx
 cd ~/src-build/build-ffmpeg
+    if [ -d ~/src-build/build-ffmpeg/libvpx ]; then
+       rm -rf ~/src-build/build-ffmpeg/libvpx/
+    fi
 git clone https://chromium.googlesource.com/webm/libvpx
 cd libvpx
 ./configure --disable-examples --disable-unit-tests
@@ -237,6 +243,9 @@ checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=
  show_progress "		Installing opus"
 ################################### opus
 cd ~/src-build/build-ffmpeg
+    if [ -d ~/src-build/build-ffmpeg/opus ]; then
+       rm -rf ~/src-build/build-ffmpeg/opus/
+    fi
 git clone --depth 1 git://git.xiph.org/opus.git
 cd opus
 ./autogen.sh
@@ -267,6 +276,9 @@ if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARC
 	apt-get install librtmp-dev
 else
 	cd ~/src-build/build-ffmpeg
+    if [ -d ~/src-build/build-ffmpeg/rtmpdump ]; then
+       rm -rf ~/src-build/build-ffmpeg/rtmpdump/
+    fi
 	git clone git://git.ffmpeg.org/rtmpdump
 	cd rtmpdump
 	make SYS=posix
@@ -278,6 +290,9 @@ fi
 show_progress "Now... Using all above, compiling FFMpeg"
 ################################### Finally, ffmpeg
 cd ~/src-build/build-ffmpeg
+    if [ -d ~/src-build/build-ffmpeg/FFmpeg ]; then
+       rm -rf ~/src-build/build-ffmpeg/FFmpeg/
+    fi
 git clone https://github.com/FFmpeg/FFmpeg.git
 cd FFmpeg
 ./configure \
@@ -337,6 +352,9 @@ mkdir -p ~/src-build/gperftools
 cd ~/src-build/gperftools
 #wget -c http://ftp.twaren.net/Unix/NonGNU/libunwind/libunwind-1.1.tar.gz
 #tar zxvf libunwind-1.1.tar.gz
+    if [ -d ~/src-build/gperftools/libunwind ]; then
+       rm -rf ~/src-build/gperftools/libunwind/
+    fi
 git clone git://git.sv.gnu.org/libunwind.git
 cd libunwind
 ./autogen.sh
