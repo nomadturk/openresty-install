@@ -3,8 +3,8 @@ cd ~/
 apt-get update
 apt-get -y --force-yes upgrade
 apt-get -y --force-yes install screen nano
-rm inst.sh* 
-wget --no-check-certificate https://raw.githubusercontent.com/nomadturk/openresty-install/master/inst.sh
+rm inst2.sh* 
+wget --no-check-certificate https://raw.githubusercontent.com/nomadturk/openresty-install/master/inst2.sh
 
 
 # Some systems problems with locales. So lets try to add them just to run smoother.
@@ -25,11 +25,11 @@ update-locale en_US.UTF-8
 . /etc/default/locale
 
 echo $(tput setaf 1)The installer is now gonna run in a screen. You can detach or if your connection to ever drop you can reconnect to this screen with the command:$(tput setaf 2) screen -RR $(tput sgr0)&>> /dev/null 
-#bash inst.sh
-chmod +x inst.sh
+#bash inst2.sh
+chmod +x inst2.sh
 #killall screen
     screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill
-screen -d -m -S InstallScreen bash -c "bash inst.sh"
+screen -d -m -S InstallScreen bash -c "bash inst2.sh"
 screen -r InstallScreen
 echo "Now...  If you see this, it means I couldn't automatically get back to screen."
 echo "Just use one of the below commands:"
