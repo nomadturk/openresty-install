@@ -66,7 +66,7 @@ if [ ! -x  /usr/bin/lsb_release ]; then
 fi
 
 # Check Linux distro
-if [ "$LINUX_DISTRO" != "Ubuntu" ] && [ "$LINUX_DISTRO" != "Debian" ]; then
+if [ "$LINUX_DISTRO" != "Ubuntu" ] && [ "$LINUX_DISTRO" != "Debian" ] && [ "$LINUX_DISTRO" != "LinuxMint" ]; then
 	show_progress_error "Sorry, only Debian 7 and Ubuntu 14.04 is supported as of now"
 	exit 1
 fi
@@ -125,8 +125,8 @@ if [ "$LINUX_DISTRO" == "Debian" ]; then
 	show_progress "Adding multimedia repository and doing an apt-get update."
 	add-apt-repository -y 'deb http://www.deb-multimedia.org wheezy main non-free'
 	apt-get update
-	apt-get -y --force-yes install deb-multimedia-keyring libswresample0 libjpeg62-turbo-dev libvidstab-dev libutvideo-dev libx265-dev
-elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
+	apt-get -y --force-yes install deb-multimedia-keyring libswresample0 libjpeg62-turbo-dev libvidstab-dev libutvideo-dev libx265-dev libjpeg8-dev
+elif [ "$LINUX_DISTRO" == "Ubuntu" ] && [ "$LINUX_DISTRO" != "LinuxMint" ]; then
 	#Ubuntu
 	show_progress "Adding Ubuntu repository for FFMpeg and installing Ubuntu only stuff"
 	#apt-add-repository multiverse
@@ -172,7 +172,7 @@ apt-get -y --force-yes install graphicsmagick-libmagick-dev-compat libpam0g-dev 
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)........................."
 apt-get -y --force-yes install libtiff-dev libgif-dev libgeoip1 libxslt1.1 libxslt-dev libgd2-xpm-dev >> /dev/null
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)............................"
-apt-get -y --force-yes install libperl-dev libjpeg8-dev  libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52 libbz2-dev >> /dev/null
+apt-get -y --force-yes install libperl-dev libcdio-cdda1 libcdio-paranoia1 libcdio13 libpostproc52 libbz2-dev >> /dev/null
 show_progress_info "Installing necessary packages apt-get update, please wait $(tput setb 4)$(tput setaf 1)..............................."
 apt-get -y --force-yes install libopencore-amrnb-dev libopencore-amrwb-dev  libtheora-dev libfaac-dev libavfilter-dev libavcodec-dev libavutil-dev libavdevice-dev libavformat-dev libswscale-dev libgeoip-dev libsdl1.2-dev libva-dev libvdpau-dev  >> /dev/null
 #Debian 8 doesn't have libjpeg8 so let's install another and some others
@@ -429,6 +429,16 @@ git clone https://github.com/openssl/openssl.git
 #wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz
 #tar -zvxf openssl-1.0.2g.tar.gz
 #mv openssl-1.0.2g openssl
+cd openssl
+./config --prefix=/usr         \
+         --openssldir=/etc/ssl \
+         --libdir=lib          \
+         shared                \
+         zlib-dynamic &&
+make depend           &&
+make -j$CORES
+checkinstall --pkgname=openssl --backup=no \
+	--deldoc=yes --fstrans=no --default
 
 show_progress "		Installing pcre"
 ######################################### pcre
@@ -673,7 +683,7 @@ else
 		show_progress "Adding MariaDB Wheezy Repository"
 		add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/debian wheezy main'
 		apt-get update
-	elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
+	elif [ "$LINUX_DISTRO" == "Ubuntu" ] && [ "$LINUX_DISTRO" != "LinuxMint" ]; then
 		#Ubuntu
 		show_progress "Adding MariaDB Trusty Repository"
 		add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
