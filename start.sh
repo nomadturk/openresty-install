@@ -29,11 +29,13 @@ echo $(tput setaf 1)The installer is now gonna run in a screen. You can detach o
 chmod a+x inst2.sh
 #killall screen
 screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill
-screen -d -m -S OpenRestyInstall  ~/inst2.sh
-screen -R OpenRestyInstall
-echo "Now...  If you see this, it means I couldn't automatically get back to screen."
-echo "Just use one of the below commands:"
-echo "     screen -RR" 
-echo "     screen -R"
-echo "     screen -r OpenRestyInstall"
+screen -d -m -S OpenRestyInstall bash -c "bash -x ~/inst2.sh 2>&1 | tee OpenRestyInstall.log"
+tail -f OpenRestyInstall.log
+
+#screen -R OpenRestyInstall
+#echo "Now...  If you see this, it means I couldn't automatically get back to screen."
+#echo "Just use one of the below commands:"
+#echo "     screen -RR" 
+#echo "     screen -R"
+#echo "     screen -r OpenRestyInstall"
 
