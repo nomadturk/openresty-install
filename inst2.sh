@@ -1,23 +1,6 @@
 #!/bin/bash
 # you have write permissions there. set RETAIN_NUM_LINES to the
 
-### Setup Logging
-#http://urbanautomaton.com/blog/2014/09/09/redirecting-bash-script-output-to-syslog/
-#exec 1> >(logger -s -t $(basename $0)) 2>&1
-readonly SCRIPT_NAME=$(basename $0)
-
-log() {
-  echo "$@"
-  logger -f /tmp/OpenRestyInstall.log -t $SCRIPT_NAME "$@"
-}
-
-err() {
-  echo "$@" >&2
-  logger -f /tmp/OpenRestyInstall.error -t $SCRIPT_NAME "$@"
-}
-### Logging started
-
-
 CORES=$(grep -c ^processor /proc/cpuinfo)
 
 # Yellow
@@ -325,8 +308,8 @@ cd FFmpeg
   --enable-libgsm \
   --enable-zlib \
   --enable-swscale \
-  --enable-pthreads -j$CORES
-make
+  --enable-pthreads
+make -j$CORES
 checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
   --deldoc=yes --fstrans=no --default
 hash -r
@@ -411,7 +394,7 @@ cd ImageMagick*
 	--with-webp \
 	--with-gslib \
 	--with-perl=/usr/bin/perl \
-	--disable-static -j$CORES
+	--disable-static
 make -j$CORES
 #checkinstall --fstrans=no --install=no -y 
 make install
