@@ -26,13 +26,14 @@ update-locale en_US.UTF-8
 
 echo $(tput setaf 1)The installer is now gonna run in a screen. You can detach or if your connection to ever drop you can reconnect to this screen with the command:$(tput setaf 2) screen -RR $(tput sgr0)&>> /dev/null 
 #bash inst2.sh
-chmod +x inst2.sh
+chmod a+x inst2.sh
 #killall screen
-    screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill
-screen -d -m -S InstallScreen bash -c "bash inst2.sh"
-screen -r InstallScreen
+screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill
+screen -d -m -S OpenRestyInstall  ~/inst2.sh
+screen -R OpenRestyInstall
 echo "Now...  If you see this, it means I couldn't automatically get back to screen."
 echo "Just use one of the below commands:"
 echo "     screen -RR" 
 echo "     screen -R"
-echo "     screen -r InstallScreen"
+echo "     screen -r OpenRestyInstall"
+
