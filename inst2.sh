@@ -8,12 +8,12 @@ readonly SCRIPT_NAME=$(basename $0)
 
 log() {
   echo "$@"
-  logger -p /tmp/OpenRestyInstall.log -t $SCRIPT_NAME "$@"
+  logger -f /tmp/OpenRestyInstall.log -t $SCRIPT_NAME "$@"
 }
 
 err() {
   echo "$@" >&2
-  logger -p /tmp/OpenRestyInstall.error -t $SCRIPT_NAME "$@"
+  logger -f /tmp/OpenRestyInstall.error -t $SCRIPT_NAME "$@"
 }
 ### Logging started
 
