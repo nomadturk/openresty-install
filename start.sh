@@ -7,7 +7,7 @@ rm inst2.sh*
 wget --no-check-certificate https://raw.githubusercontent.com/nomadturk/openresty-install/master/inst2.sh
 
 
-# Some systems problems with locales. So lets try to add them just to run smoother.
+# Some systems have problems with their locales. So lets try to add them just to run smoother.
 LANGUAGE=en_US.UTF-8
 LANG=en_US.UTF-8
 LC_ALL=en_US.UTF-8
