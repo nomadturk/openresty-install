@@ -2,20 +2,21 @@
 # you have write permissions there. set RETAIN_NUM_LINES to the
 
 ### Setup Logging
-LOGFILE=/tmp/OpenRestyInstall.log
-RETAIN_NUM_LINES=10
+#http://urbanautomaton.com/blog/2014/09/09/redirecting-bash-script-output-to-syslog/
+#exec 1> >(logger -s -t $(basename $0)) 2>&1
+readonly SCRIPT_NAME=$(basename $0)
 
-function logsetup {
-    TMP=$(tail -n $RETAIN_NUM_LINES $LOGFILE 2>/dev/null) && echo "${TMP}" > $LOGFILE
-    exec > >(tee -a $LOGFILE)
-    exec 2>&1
+log() {
+  echo "$@"
+  logger -p /tmp/OpenRestyInstall.log -t $SCRIPT_NAME "$@"
 }
 
-function log {
-    echo "[$(date)]: $*"
+err() {
+  echo "$@" >&2
+  logger -p /tmp/OpenRestyInstall.error -t $SCRIPT_NAME "$@"
 }
-logsetup
 ### Logging started
+
 
 CORES=$(grep -c ^processor /proc/cpuinfo)
 
@@ -139,7 +140,7 @@ elif [ "$LINUX_DISTRO" == "Ubuntu" ]; then
 	cmake .
 	make
 	make install
-	rm -rf /tmp/vib.stab/
+	rm -rf /tmp/vid.stab/
 	
 	cd /tmp/
 	wget http://www.deb-multimedia.org/pool/main/libu/libutvideo-dmo/libutvideo15_15.1.0-dmo2_amd64.deb
@@ -191,7 +192,10 @@ if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARC
 	show_progress_error "Downloading YASM from the repository since we dont know your system architecture"
 else
     cd ~/src-build/build-ffmpeg
-	git clone git://github.com/yasm/yasm.git
+    if [ -d ~/src-build/build-ffmpeg/yasm ]; then
+       rm -rf ~/src-build/build-ffmpeg/yasm/
+    fi
+       git clone git://github.com/yasm/yasm.git
 	cd yasm
 	./autogen.sh x86_64 i386 amd64
 	# ./configure x86_64 i386 amd64
@@ -216,8 +220,8 @@ if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARC
 	show_progress_error "Sorry, architecture is not supported. Let's see if the repos has this"
 	apt-get -y --force-yes install libx264-dev
 else
-	wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
-	tar xjvf last_x264.tar.bz2
+	wget http://download.videolan.org/pub/x264/snapshots/x264-snapshot-20160430-2245-stable.tar.bz2
+	tar xjvf x264-snapshot-20160430-2245-stable.tar.bz2
 	cd x264-snapshot*
 	./configure --enable-static
 	make
@@ -802,3 +806,6 @@ apt-mark hold nginx
 # tar xvzf finally-theme-0.3.wbt.gz
 # mv bootstrap/ theme-metal/ authentic-theme-master/ xenlayer-theme/ virtual-server-theme/ /usr/share/webmin/
 ############################################################### Install Webmin Themes End
+
+return &
+exit 0
