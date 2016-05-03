@@ -30,9 +30,10 @@ chmod a+x inst2.sh
 #killall screen
 screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill
 screen -d -m -S OpenRestyInstall bash -c "bash -x ~/inst2.sh 2>&1 | tee OpenRestyInstall.log"
-tail -f OpenRestyInstall.log
+sleep 1
+screen -R OpenRestyInstall
 
-#screen -R OpenRestyInstall
+#echo "You can follow the log with: tail -f OpenRestyInstall.log"
 #echo "Now...  If you see this, it means I couldn't automatically get back to screen."
 #echo "Just use one of the below commands:"
 #echo "     screen -RR" 
