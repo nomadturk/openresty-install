@@ -308,7 +308,6 @@ cd FFmpeg
   --enable-libvidstab \
   --enable-libx265 \
   --enable-libutvideo \
-  --enable-libjpeg \
   --enable-shared \
   --enable-pic \
   --enable-libx264 \
