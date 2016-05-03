@@ -273,7 +273,7 @@ show_progress "		Installing librtmp"
 if [ "$LINUX_ARCH" != "x86_64" ] && [ "$LINUX_ARCH" != "i386" ] && [ "$LINUX_ARCH" != "i486" ] && [ "$LINUX_ARCH" != "amd64" ] && [ "$LINUX_ARCH" != "x86" ]; then
 	# Systems such as ppc64 does have trouble compiling this...
 	show_progress_error "Warning! This will affect the total time since instead of compiling, I will be using the librtmp-dev from the repos"
-	apt-get install librtmp-dev
+	apt-get -y --force-yes install librtmp-dev
 else
 	cd ~/src-build/build-ffmpeg
     if [ -d ~/src-build/build-ffmpeg/rtmpdump ]; then
