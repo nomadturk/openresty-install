@@ -108,14 +108,14 @@ if [ "$LINUX_DISTRO" == "Debian" ]; then
 	show_progress "Adding multimedia repository and doing an apt-get update."
 	add-apt-repository -y 'deb http://www.deb-multimedia.org wheezy main non-free'
 	apt-get update
-	apt-get -y --force-yes install deb-multimedia-keyring libswresample0 libjpeg62-turbo-dev libvidstab-dev libutvideo-dev libx265-dev libjpeg8-dev
+	apt-get -y --force-yes install deb-multimedia-keyring libswresample0 libvidstab-dev libutvideo-dev libx265-dev
 elif [ "$LINUX_DISTRO" == "Ubuntu" ] && [ "$LINUX_DISTRO" != "LinuxMint" ]; then
 	#Ubuntu
 	show_progress "Adding Ubuntu repository for FFMpeg and installing Ubuntu only stuff"
 	#apt-add-repository multiverse
 	#add-apt-repository -y ppa:jon-severinsson/ffmpeg
 	#apt-get update
-	apt-get -y --force-yes install cmake libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev libjpeg62-dev unzip librtmp0 librtmp-dev
+	apt-get -y --force-yes install cmake libglib2.0-dev libfontconfig1-dev libtiff4-dev libexif-dev unzip librtmp0 librtmp-dev
 	
 	cd /tmp/
 	git clone https://github.com/georgmartius/vid.stab.git
